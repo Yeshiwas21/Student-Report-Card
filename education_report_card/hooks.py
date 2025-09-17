@@ -5,6 +5,16 @@ app_description = "Developed to customize education module and develop a report 
 app_email = "yeshiwas@developer.com"
 app_license = "mit"
 
+
+fixtures =[
+    {
+        "dt": "Custom Field",
+        "filters":[
+            ["dt", "in", ["Program", "Course"]]
+            ]
+    }
+]
+
 # Apps
 # ------------------
 
