@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class ReportTemplate(Document):
+class CompetencyDescription(Document):
 	pass

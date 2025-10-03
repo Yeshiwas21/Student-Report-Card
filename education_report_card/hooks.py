@@ -12,8 +12,17 @@ fixtures =[
         "filters":[
             ["dt", "in", ["Program", "Course"]]
             ]
-    }
+    },
+    {
+        "dt": "Workspace",
+        "filters":[
+            ["name", "in", ["Education", ]]
+            ]
+    },
+
 ]
+
+
 
 # Apps
 # ------------------

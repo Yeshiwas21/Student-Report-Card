@@ -1,0 +1,201 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2025-09-26 15:30:38.458389",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "report_date",
+  "teacher",
+  "student",
+  "get_topics_and_comptencies",
+  "column_break_vvns",
+  "term",
+  "program",
+  "course",
+  "section_break_dxze",
+  "student_report_detail",
+  "section_break_kpys",
+  "unit_test_percentage",
+  "coursework_percentage",
+  "exam_percentage",
+  "section_break_tptt",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "report_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Report Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "term",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Term",
+   "options": "Academic Term",
+   "reqd": 1
+  },
+  {
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Program",
+   "options": "Program",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Course / Subject",
+   "options": "Course",
+   "reqd": 1
+  },
+  {
+   "fieldname": "teacher",
+   "fieldtype": "Link",
+   "label": "Teacher",
+   "options": "Instructor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Student Name",
+   "options": "Student",
+   "reqd": 1
+  },
+  {
+   "fieldname": "student_report_detail",
+   "fieldtype": "Table",
+   "label": "Student Report Detail",
+   "options": "Student Report Detail"
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_percentage",
+   "fieldtype": "Float",
+   "label": "Coursework %",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_percentage",
+   "fieldtype": "Float",
+   "label": "Unit Tests %",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_percentage",
+   "fieldtype": "Float",
+   "label": "Exam %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Student Report",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_kpys",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_tptt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_dxze",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_vvns",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "STUDENT REPORT-.YYYY.-",
+   "print_hide": 1,
+   "read_only": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "get_topics_and_comptencies",
+   "fieldtype": "Button",
+   "label": "Get Topics and Comptencies"
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-09-30 18:57:19.899507",
+ "modified_by": "yeshiwas@gmail.com",
+ "module": "Education Report",
+ "name": "Student Report",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Education Manager",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Instructor",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "student"
+}
