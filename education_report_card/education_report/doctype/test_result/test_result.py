@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from frappe.utils import today, getdate
 
@@ -36,6 +37,7 @@ class TestResult(Document):
 						frappe.throw(
 							f"Student <b>{row.student}</b> is not enrolled in Program <b>{self.program}</b>"
 						)
+
 	def validate_mark_earned(self):
 		if self.test_detail:
 			possible_mark = self.possible_mark or 0
