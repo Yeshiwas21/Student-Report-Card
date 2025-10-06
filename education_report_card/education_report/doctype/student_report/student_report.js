@@ -107,7 +107,12 @@ frappe.ui.form.on("Student Report", {
 
         frappe.call({
             method: "education_report_card.education_report.doctype.student_report.student_report.get_topics_and_comptencies",
-            args: { course: frm.doc.course },
+            args: {
+                program: frm.doc.program,
+                course: frm.doc.course,
+                term: frm.doc.term
+
+            },
             callback: function (r) {
                 if (!r.message) return;
 

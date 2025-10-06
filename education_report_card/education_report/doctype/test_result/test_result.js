@@ -21,6 +21,19 @@ frappe.ui.form.on('Test Result', {
         } else {
             frm.trigger("test_date");
         }
+
+        // Filter courses based on selected program
+        frm.set_query("course", function () {
+            if (!frm.doc.program) {
+                frappe.msgprint(__("Please select a Program first."));
+                return { filters: { name: ["is", "set"], name: "" } };
+            }
+
+            return {
+                query: "education_report_card.education_report.doctype.student_report.student_report.get_program_courses",
+                filters: { program: frm.doc.program }
+            };
+        });
     },
 
     test_date: function (frm) {
@@ -45,6 +58,14 @@ frappe.ui.form.on('Test Result', {
         // Clear child table when program changes
         frm.clear_table('test_detail');
         frm.refresh_field('test_detail');
+
+        // Clear course when program changes or is cleared
+        frm.set_value("course", "");
+    },
+    course: function (frm) {
+        // Clear child table when program changes
+        frm.clear_table('test_detail');
+        frm.refresh_field('test_detail');
     },
 
     get_student: function (frm) {
@@ -56,7 +77,8 @@ frappe.ui.form.on('Test Result', {
         frappe.call({
             method: "education_report_card.education_report.doctype.test_result.test_result.get_enrolled_students",
             args: {
-                program: frm.doc.program
+                program: frm.doc.program,
+                term: frm.doc.term
             },
             callback: function (r) {
                 if (r.message) {

@@ -11,6 +11,7 @@ class TestResult(Document):
 		self.validate_duplicated_test_detail()
 		self.validate_enrolled_only()
 		self.validate_mark_earned()
+		self.validate_course_program_association()
 
 	def validate_duplicated_test_detail(self):
 		if self.test_detail:
@@ -55,20 +56,49 @@ class TestResult(Document):
 					frappe.throw(
 						f"Mark earned cannot be negative at row '<b>{index}</b>'"
 					)
+	def validate_course_program_association(self):
+		"""Ensure that the selected Course belongs to the selected Program"""
+		if not self.program or not self.course:
+			frappe.throw(_("Please select both Program and Course."))
+
+		# Check if the course is part of the selected program
+		exists = frappe.db.exists(
+			"Program Course",
+			{"parent": self.program, "course": self.course}
+		)
+
+		if not exists:
+			frappe.throw(
+				_("The selected Course <b>{0}</b> is not associated with the Program <b>{1}</b>.").format(
+					self.course, self.program
+				)
+			)
 
 @frappe.whitelist()
-def get_enrolled_students(program):
+def get_enrolled_students(program, term):
     if not program:
-        frappe.throw(_("Please select a program first"))
+        frappe.throw(_("Please select a Program first"))
+    if not term:
+        frappe.throw(_("Please select a Term first"))
 
+    # Get the academic year linked to the selected term
+    academic_year = frappe.db.get_value("Academic Term", term, "academic_year")
+    if not academic_year:
+        frappe.throw(_("The selected Term does not have an associated Academic Year"))
+
+    # Fetch students enrolled in the program and academic year
     students = frappe.get_all(
         "Program Enrollment",
-        filters={"program": program, "docstatus": 1},
+        filters={
+            "program": program,
+            "academic_year": academic_year,
+            "docstatus": 1
+        },
         fields=["student", "student_name"]
     )
 
-    # Return a list of dicts for child table
     return [{"student": s.student, "student_name": s.student_name} for s in students]
+
 
 @frappe.whitelist()
 def get_term_for_date(test_date):
@@ -85,3 +115,16 @@ def get_term_for_date(test_date):
         as_dict=1,
     )
     return term[0].name if term else None
+
+@frappe.whitelist()
+def get_program_courses(program):
+    if not program:
+        return []
+
+    courses = frappe.get_all(
+        "Program Course",
+        filters={"parent": program},
+        fields=["course"]
+    )
+
+    return [c.course for c in courses]

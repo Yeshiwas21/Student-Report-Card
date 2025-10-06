@@ -14,6 +14,7 @@
   "column_break_zlgl",
   "term",
   "program",
+  "course",
   "teacher",
   "section_break_mhkl",
   "test_detail",
@@ -107,13 +108,20 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "label": "Course",
+   "options": "Course",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-30 18:56:17.950410",
+ "modified": "2025-10-06 15:56:39.352368",
  "modified_by": "yeshiwas@gmail.com",
  "module": "Education Report",
  "name": "Test Result",

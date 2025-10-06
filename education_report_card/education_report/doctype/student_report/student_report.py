@@ -110,65 +110,62 @@ def get_program_courses(doctype, txt, searchfield, start, page_len, filters):
 
 
 @frappe.whitelist()
-def get_topics_and_comptencies(course):
+def get_topics_and_comptencies(program, course, term):
     """
-    Fetch topics from Course Topics of the given course,
-    then fetch competencies + grading scales for each topic.
-    If no competencies found, return only topic.
+    Fetch topics and competencies linked to the given Program, Course, and Academic Term.
+    The Academic Year is automatically derived from the selected Term.
     """
+    if not (program and course and term):
+        frappe.throw(_("Please select Program, Course, and Academic Term."))
+
+    # 🔹 Get the Academic Year from the selected Term
+    academic_year = frappe.db.get_value("Academic Term", term, "academic_year")
+    if not academic_year:
+        frappe.throw(_("The selected Term is not linked to any Academic Year."))
+
     data = []
 
-    # 1. Get topics from the Course Topic child table
-    course_topics = frappe.get_all(
-        "Course Topic",
-        filters={"parent": course},
-        fields=["topic"]  # Link to Topic
+    # 🔹 Get Competencies associated with this Program, Course, and Academic Year
+    competencies = frappe.get_all(
+        "Competency",
+        filters={
+            "program": program,
+            "course": course,
+            "academic_year": academic_year
+        },
+        fields=["name", "topic"]
     )
 
-    if not course_topics:
-        return {"status": "no_topics", "data": []}
+    if not competencies:
+        return {"status": "no_competencies", "data": []}
 
-    for ct in course_topics:
-        topic_name = frappe.get_value("Topic", ct.topic, "topic_name")
+    # 🔹 Loop through competencies to fetch topics and their details
+    for comp in competencies:
+        topic_name = frappe.db.get_value("Topic", comp.topic, "topic_name")
 
-        # 2. Get competencies for this topic
-        competencies = frappe.get_all(
-            "Competency",
-            filters={"topic": ct.topic},
-            fields=["name"]
+        details = frappe.get_all(
+            "Competency Detail",
+            filters={"parent": comp.name},
+            fields=["competency_description", "grading_scale"],
+            order_by="idx asc"
         )
 
-        if not competencies:
-            # only topic, no competencies
+        if details:
+            for d in details:
+                data.append({
+                    "topic_name": topic_name,
+                    "competency": d.competency_description,
+                    "grading_scale": d.grading_scale
+                })
+        else:
             data.append({
                 "topic_name": topic_name,
                 "competency": None,
                 "grading_scale": None
             })
-            continue
-
-        for comp in competencies:
-            details = frappe.get_all(
-                "Competency Detail",
-                filters={"parent": comp.name, "parenttype": "Competency"},
-                fields=["competency_description", "grading_scale"]
-            )
-
-            if details:
-                for d in details:
-                    data.append({
-                        "topic_name": topic_name,
-                        "competency": d.competency_description,
-                        "grading_scale": d.grading_scale
-                    })
-            else:
-                data.append({
-                    "topic_name": topic_name,
-                    "competency": None,
-                    "grading_scale": None
-                })
 
     return {"status": "ok", "data": data}
+
 
 
 @frappe.whitelist()
