@@ -9,6 +9,7 @@
   "report_date",
   "teacher",
   "student",
+  "student_name",
   "get_topics_and_comptencies",
   "column_break_vvns",
   "term",
@@ -20,6 +21,8 @@
   "unit_test_percentage",
   "coursework_percentage",
   "exam_percentage",
+  "comment_section",
+  "term_comment",
   "section_break_tptt",
   "amended_from"
  ],
@@ -44,7 +47,7 @@
    "fieldname": "program",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Program",
+   "label": "Program/Grade",
    "options": "Program",
    "read_only": 1,
    "reqd": 1
@@ -60,7 +63,7 @@
   {
    "fieldname": "teacher",
    "fieldtype": "Link",
-   "label": "Teacher",
+   "label": "Teacher/Instructor",
    "options": "Instructor",
    "reqd": 1
   },
@@ -68,7 +71,7 @@
    "fieldname": "student",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Student Name",
+   "label": "Student",
    "options": "Student",
    "reqd": 1
   },
@@ -111,7 +114,8 @@
   },
   {
    "fieldname": "section_break_kpys",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Averages"
   },
   {
    "fieldname": "section_break_tptt",
@@ -119,7 +123,8 @@
   },
   {
    "fieldname": "section_break_dxze",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Grade"
   },
   {
    "fieldname": "column_break_vvns",
@@ -139,12 +144,30 @@
    "fieldname": "get_topics_and_comptencies",
    "fieldtype": "Button",
    "label": "Get Topics and Comptencies"
+  },
+  {
+   "fieldname": "comment_section",
+   "fieldtype": "Section Break",
+   "label": "Term Comment"
+  },
+  {
+   "fieldname": "term_comment",
+   "fieldtype": "Link",
+   "label": "Term Comment",
+   "options": "Term Comment"
+  },
+  {
+   "fetch_from": "student.student_name",
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Student Name"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-30 18:57:19.899507",
- "modified_by": "yeshiwas@gmail.com",
+ "modified": "2025-10-11 11:48:24.189992",
+ "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",
  "naming_rule": "By \"Naming Series\" field",

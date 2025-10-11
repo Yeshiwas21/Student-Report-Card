@@ -2,89 +2,68 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2025-09-22 09:52:09.226035",
+ "creation": "2025-10-11 05:21:34.013354",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "program",
-  "course",
-  "column_break_psxr",
-  "academic_year",
-  "topic",
-  "section_break_jbbd",
-  "detail"
+  "teacher",
+  "column_break_vmqd",
+  "term",
+  "section_break_krwp",
+  "comment"
  ],
  "fields": [
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Series",
    "no_copy": 1,
-   "options": "COMPETENCY-.YYYY.-",
+   "options": "TERM-COMMENT-.YYYY.-",
    "print_hide": 1,
-   "read_only": 1,
    "set_only_once": 1
   },
   {
-   "fieldname": "column_break_psxr",
+   "fieldname": "teacher",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Teacher/Instructor",
+   "options": "Instructor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_vmqd",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "program",
+   "fieldname": "term",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Program/Grade",
-   "options": "Program",
+   "label": "Term",
+   "options": "Academic Term",
    "reqd": 1
   },
   {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Academic Year",
-   "options": "Academic Year",
-   "reqd": 1
-  },
-  {
-   "fieldname": "course",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Course/Subject",
-   "options": "Course",
-   "reqd": 1
-  },
-  {
-   "fieldname": "topic",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Topic",
-   "options": "Topic",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "section_break_jbbd",
+   "fieldname": "section_break_krwp",
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "detail",
-   "fieldtype": "Table",
-   "label": "Detail",
-   "options": "Competency Detail"
+   "fieldname": "comment",
+   "fieldtype": "Long Text",
+   "label": "Comment",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-11 05:26:06.116581",
+ "modified": "2025-10-11 05:27:55.611437",
  "modified_by": "Administrator",
  "module": "Education Report",
- "name": "Competency",
+ "name": "Term Comment",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
@@ -97,6 +76,33 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Academics User",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Instructor",
+   "select": 1,
    "share": 1,
    "write": 1
   }
@@ -105,5 +111,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "topic"
+ "title_field": "teacher"
 }

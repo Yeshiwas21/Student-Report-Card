@@ -56,7 +56,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Program",
+   "label": "Program/Grade",
    "options": "Program",
    "reqd": 1
   },
@@ -112,7 +112,7 @@
   {
    "fieldname": "course",
    "fieldtype": "Link",
-   "label": "Course",
+   "label": "Course/Subject",
    "options": "Course",
    "reqd": 1
   }
@@ -121,8 +121,8 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-06 15:56:39.352368",
- "modified_by": "yeshiwas@gmail.com",
+ "modified": "2025-10-11 05:25:33.900781",
+ "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Test Result",
  "naming_rule": "By \"Naming Series\" field",

@@ -9,6 +9,7 @@ from frappe.utils import today, getdate
 class StudentReport(Document):
     def validate(self):
         self.validate_grades_of_terms()
+        self.validate_duplicated_entry()
 
     def validate_grades_of_terms(self):
         if self.student_report_detail:
@@ -31,8 +32,18 @@ class StudentReport(Document):
                                 f"Allowed grades are: {', '.join(grade_codes)} "
                                 f"(Grading Scale: {grading_scale.name})"
                             )
+    def validate_duplicated_entry(self):
+        existings = frappe.get_all("Student Report",
+                                   filters={"name":["!=", self.name], "student": self.student, "course":self.course},
+                                   fields={"name", "student", "course"}
+                                   )
+        if len(existings) > 0:
+            for existing in existings:
+                if existing:
+                    existing_link = ''.join(f"<a href='/app/student-report/{existing.name}'>{existing.name}</a>")
+                    frappe.throw(f"The Student '<b>{self.student}</b>'  has another report '<b>{existing_link} </b>' for the same course '<b> {self.course}</b>'")
+                
 
-        
 @frappe.whitelist()
 def get_term_for_date(report_date):
     """Return the Academic Term that covers the given date"""

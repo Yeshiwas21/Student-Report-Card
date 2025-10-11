@@ -1,0 +1,76 @@
+<style>
+    .filter-card select {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .filter-card select:hover {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    #load_reports {
+        transition: background 0.2s ease-in-out;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        min-width: 180px;
+    }
+
+    .filter-label {
+        font-size: 13px;
+        color: #4b5563;
+        margin-bottom: 3px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="student-report-summary p-6 bg-gray-50 min-h-screen">
+    <div class="filter-card bg-white p-4 rounded-2xl shadow-sm mb-6 border border-gray-200">
+        <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+            <i class="fa fa-filter text-blue-500"></i> Report Filters
+        </h2>
+
+        <div class="flex flex-wrap items-end gap-4">
+            <div class="filter-group">
+                <label class="filter-label">Program</label>
+                <select id="program"
+                    class="frappe-control rounded-lg border-gray-300 focus:border-blue-400 focus:ring focus:ring-blue-100 p-2">
+                    <option value="">-- None --</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Term</label>
+                <select id="term"
+                    class="frappe-control rounded-lg border-gray-300 focus:border-blue-400 focus:ring focus:ring-blue-100 p-2">
+                    <option value="">-- None --</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Course</label>
+                <select id="course"
+                    class="frappe-control rounded-lg border-gray-300 focus:border-blue-400 focus:ring focus:ring-blue-100 p-2">
+                    <option value="">-- None --</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Student</label>
+                <select id="student"
+                    class="frappe-control rounded-lg border-gray-300 focus:border-blue-400 focus:ring focus:ring-blue-100 p-2">
+                    <option value="">-- None --</option>
+                </select>
+            </div>
+
+            <button id="load_reports"
+                class="btn btn-primary h-[42px] px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow flex items-center gap-2 mt-5">
+                <i class="fa fa-sync-alt"></i> Load
+            </button>
+        </div>
+    </div>
+
+    <div id="report_output" class="mt-6"></div>
+</div>
