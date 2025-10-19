@@ -39,16 +39,16 @@ frappe.ui.form.on('Test Result', {
     test_date: function (frm) {
         if (frm.doc.test_date) {
             frappe.call({
-                method: "education_report_card.education_report.doctype.test_result.test_result.get_term_for_date",
+                method: "education_report_card.education_report.doctype.test_result.test_result.get_academic_year",
                 args: {
                     test_date: frm.doc.test_date
                 },
                 callback: function (r) {
                     if (r.message) {
-                        frm.set_value("term", r.message);
+                        frm.set_value("academic_year", r.message);
                     } else {
-                        frappe.msgprint(__("No Academic Term found for this date"));
-                        frm.set_value("term", null);
+                        frappe.msgprint(__("No Academic Year found for this test date"));
+                        frm.set_value("academic_year", null);
                     }
                 }
             });
@@ -67,6 +67,11 @@ frappe.ui.form.on('Test Result', {
         frm.clear_table('test_detail');
         frm.refresh_field('test_detail');
     },
+    academic_year: function (frm) {
+        // Clear child table when program changes
+        frm.clear_table('test_detail');
+        frm.refresh_field('test_detail');
+    },
 
     get_student: function (frm) {
         if (!frm.doc.program) {
@@ -78,7 +83,7 @@ frappe.ui.form.on('Test Result', {
             method: "education_report_card.education_report.doctype.test_result.test_result.get_enrolled_students",
             args: {
                 program: frm.doc.program,
-                term: frm.doc.term
+                academic_year: frm.doc.academic_year
             },
             callback: function (r) {
                 if (r.message) {

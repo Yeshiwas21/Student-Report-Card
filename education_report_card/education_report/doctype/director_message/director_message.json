@@ -2,57 +2,38 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2025-10-11 05:21:34.013354",
+ "creation": "2025-10-18 13:08:37.528980",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "teacher",
-  "teacher_name",
+  "director",
+  "director_name",
+  "column_break_zven",
   "academic_year",
-  "column_break_vmqd",
-  "program",
-  "student",
-  "section_break_krwp",
+  "term_notescomments_section",
   "term1_comment",
   "term2_comment",
   "term3_comment"
  ],
  "fields": [
   {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "label": "Series",
-   "no_copy": 1,
-   "options": "TERM-COMMENT-.YYYY.-",
-   "print_hide": 1,
-   "read_only": 1,
-   "set_only_once": 1
-  },
-  {
-   "fieldname": "teacher",
+   "fieldname": "director",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Homeroom Teacher/Instructor",
+   "label": "Director",
    "options": "Instructor",
    "reqd": 1
   },
   {
-   "fieldname": "column_break_vmqd",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_krwp",
-   "fieldtype": "Section Break",
-   "label": "Comments"
-  },
-  {
-   "fetch_from": "teacher.instructor_name",
-   "fieldname": "teacher_name",
+   "fetch_from": "director.instructor_name",
+   "fieldname": "director_name",
    "fieldtype": "Data",
-   "label": "Teacher Name",
-   "read_only": 1
+   "label": "Director Name"
+  },
+  {
+   "fieldname": "column_break_zven",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "academic_year",
@@ -64,22 +45,18 @@
    "reqd": 1
   },
   {
-   "fieldname": "student",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student",
-   "options": "Student",
-   "reqd": 1
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "DIRECTOR-MESSAGE-.YYYY.-",
+   "read_only": 1,
+   "set_only_once": 1
   },
   {
-   "fieldname": "program",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Program/Grade",
-   "options": "Program",
-   "reqd": 1
+   "fieldname": "term_notescomments_section",
+   "fieldtype": "Section Break",
+   "label": "Term Notes/Comments"
   },
   {
    "fieldname": "term1_comment",
@@ -100,10 +77,10 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-18 13:23:06.416052",
+ "modified": "2025-10-18 13:22:42.677332",
  "modified_by": "Administrator",
  "module": "Education Report",
- "name": "Term Comment",
+ "name": "Director Message",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
@@ -116,7 +93,6 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "select": 1,
    "share": 1,
    "write": 1
   },
@@ -129,7 +105,6 @@
    "read": 1,
    "report": 1,
    "role": "Academics User",
-   "select": 1,
    "share": 1,
    "write": 1
   },
@@ -142,7 +117,6 @@
    "read": 1,
    "report": 1,
    "role": "Instructor",
-   "select": 1,
    "share": 1,
    "write": 1
   }
@@ -151,5 +125,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "teacher_name"
+ "title_field": "director_name"
 }

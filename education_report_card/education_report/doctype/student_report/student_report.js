@@ -39,16 +39,16 @@ frappe.ui.form.on("Student Report", {
     report_date: function (frm) {
         if (frm.doc.report_date) {
             frappe.call({
-                method: "education_report_card.education_report.doctype.student_report.student_report.get_term_for_date",
+                method: "education_report_card.education_report.doctype.student_report.student_report.get_academic_year",
                 args: {
                     report_date: frm.doc.report_date
                 },
                 callback: function (r) {
                     if (r.message) {
-                        frm.set_value("term", r.message);
+                        frm.set_value("academic_year", r.message);
                     } else {
-                        frappe.msgprint(__("No Academic Term found for this date"));
-                        frm.set_value("term", null);
+                        frappe.msgprint(__("No Academic Year found for this  report date"));
+                        frm.set_value("academic_year", null);
                     }
                 }
             });
@@ -64,7 +64,10 @@ frappe.ui.form.on("Student Report", {
             // fetch program
             frappe.call({
                 method: "education_report_card.education_report.doctype.student_report.student_report.get_student_program",
-                args: { student: frm.doc.student },
+                args: {
+                    student: frm.doc.student,
+                    academic_year: frm.doc.academic_year
+                },
                 callback(r) {
                     if (r.message) {
                         frm.set_value("program", r.message);
@@ -74,30 +77,14 @@ frappe.ui.form.on("Student Report", {
                     }
                 }
             });
-
-            // fetch averages
-            frappe.call({
-                method: "education_report_card.education_report.doctype.student_report.student_report.get_student_test_averages",
-                args: { student: frm.doc.student },
-                callback(r) {
-                    if (r.message) {
-                        frm.set_value("unit_test_percentage", r.message.unit_test_percentage);
-                        frm.set_value("coursework_percentage", r.message.coursework_percentage);
-                        frm.set_value("exam_percentage", r.message.exam_percentage);
-                    }
-                }
-            });
-
         } else {
             frm.set_value("program", "");
-            frm.set_value("unit_test_percentage", "");
-            frm.set_value("coursework_percentage", "");
-            frm.set_value("exam_percentage", "");
         }
     },
     course(frm) {
         frm.clear_table('student_report_detail');
         frm.refresh_field('student_report_detail');
+
     },
     get_topics_and_comptencies(frm) {
         if (!frm.doc.course) {
@@ -110,7 +97,7 @@ frappe.ui.form.on("Student Report", {
             args: {
                 program: frm.doc.program,
                 course: frm.doc.course,
-                term: frm.doc.term
+                academic_year: frm.doc.academic_year
 
             },
             callback: function (r) {
@@ -142,7 +129,7 @@ frappe.ui.form.on("Student Report", {
                 if (competencies_found) {
                     frappe.msgprint(__('Topics and Competencies added to the table'));
                 } else {
-                    frappe.msgprint(__('Topics added, but no Competencies found for them'));
+                    frappe.msgprint(__('No Competencies found for this course'));
                 }
             }
         });

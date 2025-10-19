@@ -27,6 +27,7 @@ after_migrate = [
     "education_report_card.after_migrate.workspace_sync.execute"
 ]
 
+
 # Apps
 # ------------------
 

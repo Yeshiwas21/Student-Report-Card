@@ -13,13 +13,50 @@ class TestResult(Document):
 		self.validate_mark_earned()
 		self.validate_course_program_association()
 
+	def on_submit(self):
+		"""
+		Called when the document is submitted.
+		Updates related Student Reports.
+		"""
+		self.update_student_reports()
+
+	def on_cancel(self):
+		"""
+		Called when the document is cancelled.
+		Updates related Student Reports.
+		"""
+		self.update_student_reports()
+
+	def update_student_reports(self):
+		"""
+		Helper method to update Student Reports related to this document.
+		"""
+		for td in self.test_detail:
+			# Find matching Student Report
+			student_report = frappe.db.get_value(
+				"Student Report",
+				{
+					"student": td.student,
+					"program": self.program,
+					"course": self.course,
+					"academic_year": self.academic_year
+				},
+				"name"
+			)
+
+			if student_report:
+				sr = frappe.get_doc("Student Report", student_report)
+				sr.calculate_test_result_averages()
+				sr.save(ignore_permissions=True)
+				frappe.db.commit()
+
 	def validate_duplicated_test_detail(self):
 		if self.test_detail:
 			seen = set()
 			for row in self.test_detail:
 				if row.student in seen:
 					frappe.throw(f"Duplicated student <b> '{row.student}' </b>")
-				seen.add(row.student)
+					seen.add(row.student)
 
 	def validate_enrolled_only(self):
 		if self.program:
@@ -75,16 +112,11 @@ class TestResult(Document):
 			)
 
 @frappe.whitelist()
-def get_enrolled_students(program, term):
+def get_enrolled_students(program, academic_year):
     if not program:
-        frappe.throw(_("Please select a Program first"))
-    if not term:
-        frappe.throw(_("Please select a Term first"))
-
-    # Get the academic year linked to the selected term
-    academic_year = frappe.db.get_value("Academic Term", term, "academic_year")
+        frappe.throw(_("Please select a Program/Grade first"))
     if not academic_year:
-        frappe.throw(_("The selected Term does not have an associated Academic Year"))
+        frappe.throw(_("Please select an Academic Year"))
 
     # Fetch students enrolled in the program and academic year
     students = frappe.get_all(
@@ -101,20 +133,20 @@ def get_enrolled_students(program, term):
 
 
 @frappe.whitelist()
-def get_term_for_date(test_date):
-    """Return the Academic Term that covers the given date"""
+def get_academic_year(test_date):
+    """Return the Academic Year that covers the given date"""
     date = getdate(test_date)
-    term = frappe.db.sql(
+    year = frappe.db.sql(
         """
         SELECT name
-        FROM `tabAcademic Term`
-        WHERE %s BETWEEN term_start_date AND term_end_date
+        FROM `tabAcademic Year`
+        WHERE %s BETWEEN year_start_date AND year_end_date
         LIMIT 1
         """,
         (date,),
         as_dict=1,
     )
-    return term[0].name if term else None
+    return year[0].name if year else None
 
 @frappe.whitelist()
 def get_program_courses(program):

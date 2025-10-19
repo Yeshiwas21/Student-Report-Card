@@ -12,17 +12,51 @@
   "student_name",
   "get_topics_and_comptencies",
   "column_break_vvns",
-  "term",
+  "academic_year",
   "program",
   "course",
+  "grading_scale",
   "section_break_dxze",
   "student_report_detail",
+  "section_break_ldpy",
+  "student_report_grade",
+  "section_break_runa",
+  "column_break_bfgw",
+  "coursework_term1_average_mark",
+  "coursework_term1_20_percent",
+  "column_break_pqms",
+  "coursework_term2_average_mark",
+  "coursework_term2_20_percent",
+  "column_break_gkvc",
+  "coursework_term3_average_mark",
+  "coursework_term3_20_percent",
   "section_break_kpys",
-  "unit_test_percentage",
-  "coursework_percentage",
-  "exam_percentage",
-  "comment_section",
-  "term_comment",
+  "column_break_jvqw",
+  "unit_test_term1_average_mark",
+  "unit_test_term1_30_percent",
+  "column_break_rjyr",
+  "unit_test_term2_average_mark",
+  "unit_test_term2_30_percent",
+  "column_break_lonf",
+  "unit_test_term3_average_mark",
+  "unit_test_term3_30_percent",
+  "section_break_ngvq",
+  "column_break_kjgr",
+  "exam_term1_average_mark",
+  "exam_term1_50_percent",
+  "column_break_vumh",
+  "exam_term2_average_mark",
+  "exam_term2_50_percent",
+  "column_break_jxvr",
+  "exam_term3_average_mark",
+  "exam_term3_50_percent",
+  "terms_total100_section",
+  "term1_total",
+  "term2_total",
+  "term3_total",
+  "column_break_bgpv",
+  "yearly_average_mark",
+  "yearly_total_grade",
   "section_break_tptt",
   "amended_from"
  ],
@@ -33,14 +67,6 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Report Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "term",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Term",
-   "options": "Academic Term",
    "reqd": 1
   },
   {
@@ -78,29 +104,8 @@
   {
    "fieldname": "student_report_detail",
    "fieldtype": "Table",
-   "label": "Student Report Detail",
+   "label": "Term's Mark Detail",
    "options": "Student Report Detail"
-  },
-  {
-   "default": "0",
-   "fieldname": "coursework_percentage",
-   "fieldtype": "Float",
-   "label": "Coursework %",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "unit_test_percentage",
-   "fieldtype": "Float",
-   "label": "Unit Tests %",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "exam_percentage",
-   "fieldtype": "Float",
-   "label": "Exam %",
-   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -115,7 +120,7 @@
   {
    "fieldname": "section_break_kpys",
    "fieldtype": "Section Break",
-   "label": "Averages"
+   "label": "Unit Test Summary"
   },
   {
    "fieldname": "section_break_tptt",
@@ -124,7 +129,7 @@
   {
    "fieldname": "section_break_dxze",
    "fieldtype": "Section Break",
-   "label": "Grade"
+   "label": "Mark"
   },
   {
    "fieldname": "column_break_vvns",
@@ -146,27 +151,259 @@
    "label": "Get Topics and Comptencies"
   },
   {
-   "fieldname": "comment_section",
-   "fieldtype": "Section Break",
-   "label": "Term Comment"
-  },
-  {
-   "fieldname": "term_comment",
-   "fieldtype": "Link",
-   "label": "Term Comment",
-   "options": "Term Comment"
-  },
-  {
    "fetch_from": "student.student_name",
    "fieldname": "student_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Student Name"
+   "label": "Student Name",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.show_grade",
+   "fieldname": "section_break_ldpy",
+   "fieldtype": "Section Break",
+   "label": "Grade"
+  },
+  {
+   "fieldname": "student_report_grade",
+   "fieldtype": "Table",
+   "label": "Term's Grade Detail",
+   "options": "Student Report Detail Grade",
+   "read_only": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_runa",
+   "fieldtype": "Section Break",
+   "label": "Coursework Summary"
+  },
+  {
+   "fieldname": "column_break_pqms",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ngvq",
+   "fieldtype": "Section Break",
+   "label": "End of Term Exam Summary"
+  },
+  {
+   "fieldname": "column_break_vumh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_term1_average_mark",
+   "fieldtype": "Float",
+   "label": "Term1  Average Mark",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_term2_average_mark",
+   "fieldtype": "Float",
+   "label": "Term2  Average Mark",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_term3_average_mark",
+   "fieldtype": "Float",
+   "label": "Term3  Average Mark",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_jvqw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_rjyr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lonf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bfgw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_term1_average_mark",
+   "fieldtype": "Float",
+   "label": "Term1 Average Mark",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_term2_average_mark",
+   "fieldtype": "Float",
+   "label": "Term2 Average Mark",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_gkvc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_term3_average_mark",
+   "fieldtype": "Float",
+   "label": "Term3 Average Mark",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_kjgr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jxvr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "yearly_average_mark",
+   "fieldtype": "Float",
+   "label": "Yearly Average Mark",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_term1_20_percent",
+   "fieldtype": "Float",
+   "label": "Term1 20%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_term2_20_percent",
+   "fieldtype": "Float",
+   "label": "Term2 20%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "coursework_term3_20_percent",
+   "fieldtype": "Float",
+   "label": "Term3 20%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_term1_30_percent",
+   "fieldtype": "Float",
+   "label": "Term1 30%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_term2_30_percent",
+   "fieldtype": "Float",
+   "label": "Term2 30%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "unit_test_term3_30_percent",
+   "fieldtype": "Float",
+   "label": "Term3 30%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_term1_50_percent",
+   "fieldtype": "Float",
+   "label": "Term1 50%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_term2_50_percent",
+   "fieldtype": "Float",
+   "label": "Term2 50%",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_term3_50_percent",
+   "fieldtype": "Float",
+   "label": "Term3 50%",
+   "read_only": 1
+  },
+  {
+   "fieldname": "terms_total100_section",
+   "fieldtype": "Section Break",
+   "label": "Term's Total(100%)"
+  },
+  {
+   "default": "0",
+   "fieldname": "term1_total",
+   "fieldtype": "Float",
+   "label": "Term1 Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_bgpv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "term2_total",
+   "fieldtype": "Float",
+   "label": "Term2 Total",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "term3_total",
+   "fieldtype": "Float",
+   "label": "Term3 Total",
+   "read_only": 1
+  },
+  {
+   "default": "NA",
+   "fieldname": "yearly_total_grade",
+   "fieldtype": "Data",
+   "label": "Yearly Total Grade",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_term1_average_mark",
+   "fieldtype": "Float",
+   "label": "Term1 Average Mark",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_term2_average_mark",
+   "fieldtype": "Float",
+   "label": "Term2 Average Mark",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "exam_term3_average_mark",
+   "fieldtype": "Float",
+   "label": "Term3 Average Mark",
+   "read_only": 1
+  },
+  {
+   "fieldname": "grading_scale",
+   "fieldtype": "Link",
+   "label": "Grading Scale",
+   "options": "Grading Scale",
+   "reqd": 1
   }
  ],
- "is_submittable": 1,
  "links": [],
- "modified": "2025-10-11 11:48:24.189992",
+ "modified": "2025-10-16 20:55:01.649334",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",
@@ -184,7 +421,6 @@
    "role": "System Manager",
    "select": 1,
    "share": 1,
-   "submit": 1,
    "write": 1
   },
   {
@@ -198,7 +434,6 @@
    "role": "Education Manager",
    "select": 1,
    "share": 1,
-   "submit": 1,
    "write": 1
   },
   {
@@ -212,7 +447,6 @@
    "role": "Instructor",
    "select": 1,
    "share": 1,
-   "submit": 1,
    "write": 1
   }
  ],
@@ -220,5 +454,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "student"
+ "title_field": "student",
+ "track_changes": 1
 }

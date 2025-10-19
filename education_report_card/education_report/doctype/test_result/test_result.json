@@ -8,14 +8,15 @@
  "field_order": [
   "naming_series",
   "test_date",
-  "test_type",
-  "possible_mark",
-  "get_student",
-  "column_break_zlgl",
-  "term",
+  "academic_year",
   "program",
   "course",
+  "get_student",
+  "column_break_zlgl",
+  "test_type",
   "teacher",
+  "possible_mark",
+  "term",
   "section_break_mhkl",
   "test_detail",
   "amended_from"
@@ -39,16 +40,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Test Type",
-   "options": "\nCousework\nUnit Test\nExam",
-   "reqd": 1
-  },
-  {
-   "fieldname": "term",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Term",
-   "options": "Academic Term",
+   "options": "\nCoursework\nUnit Test\nExam",
    "reqd": 1
   },
   {
@@ -115,13 +107,27 @@
    "label": "Course/Subject",
    "options": "Course",
    "reqd": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "reqd": 1
+  },
+  {
+   "fieldname": "term",
+   "fieldtype": "Select",
+   "label": "Term",
+   "options": "\nTerm1\nTerm2\nTerm3",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-11 05:25:33.900781",
+ "modified": "2025-10-15 15:02:12.103732",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Test Result",

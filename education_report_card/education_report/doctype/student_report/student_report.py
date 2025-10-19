@@ -2,104 +2,152 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
-from frappe.utils import today, getdate
+from frappe.utils import  getdate, flt
 
 
 class StudentReport(Document):
     def validate(self):
-        self.validate_grades_of_terms()
         self.validate_duplicated_entry()
+        self.calculate_test_result_averages()
 
-    def validate_grades_of_terms(self):
-        if self.student_report_detail:
-            for index, row in enumerate(self.student_report_detail, start=1):
-                terms = [row.term1, row.term2, row.term3]
-
-                grade_codes = []
-                grading_scale = None
-
-                if row.grading_scale:
-                    grading_scale = frappe.get_doc("Grading Scale", row.grading_scale)
-                    grade_codes = [d.grade_code for d in grading_scale.intervals]
-
-                # Validation
-                if row.topic_name and row.competency and row.grading_scale:
-                    for term in terms:
-                        if term and term not in grade_codes:
-                            frappe.throw(
-                                f"Invalid grade '{term}' at row {index}. "
-                                f"Allowed grades are: {', '.join(grade_codes)} "
-                                f"(Grading Scale: {grading_scale.name})"
-                            )
     def validate_duplicated_entry(self):
         existings = frappe.get_all("Student Report",
-                                   filters={"name":["!=", self.name], "student": self.student, "course":self.course},
+                                   filters={"name":["!=", self.name], "student": self.student, "course":self.course, "academic_year":self.academic_year},
                                    fields={"name", "student", "course"}
                                    )
         if len(existings) > 0:
             for existing in existings:
                 if existing:
                     existing_link = ''.join(f"<a href='/app/student-report/{existing.name}'>{existing.name}</a>")
-                    frappe.throw(f"The Student '<b>{self.student}</b>'  has another report '<b>{existing_link} </b>' for the same course '<b> {self.course}</b>'")
-                
+                    frappe.throw(f"The Student '<b>{self.student}</b>'  has another report '<b>{existing_link} </b>' for the same course '<b> {self.course}</b>' in the same academic year '{self.academic_year}'")
+
+
+    def calculate_test_result_averages(self):
+        """Compute weighted averages for Coursework, Unit Test, and Exam per term,
+        scaled to their contribution to the term (Coursework 20, Unit Test 30, Exam 50)."""
+        
+        student = self.student
+        course = self.course
+        program = self.program
+        academic_year = self.academic_year
+
+        # Helper function: weighted average by total possible mark
+        def get_weighted_average(test_type, term):
+            results = frappe.db.sql("""
+                SELECT tr.possible_mark, td.mark_earned
+                FROM `tabTest Result` tr
+                INNER JOIN `tabTest Result Detail` td ON td.parent = tr.name
+                WHERE tr.docstatus = 1
+                AND tr.course = %s
+                AND tr.program = %s
+                AND tr.academic_year = %s
+                AND tr.test_type = %s
+                AND tr.term = %s
+                AND td.student = %s
+            """, (course, program, academic_year, test_type, term, student), as_dict=True)
+
+            total_earned = sum(flt(r.mark_earned) for r in results)
+            total_possible = sum(flt(r.possible_mark) for r in results)
+
+            if total_possible == 0:
+                return 0
+
+            # Return average as fraction of 100
+            return (total_earned / total_possible) * 100
+
+        # === COURSEWORK (scaled to 20) ===
+        self.coursework_term1_average_mark = get_weighted_average("Coursework", "Term1") * 0.2
+        self.coursework_term2_average_mark = get_weighted_average("Coursework", "Term2") * 0.2
+        self.coursework_term3_average_mark = get_weighted_average("Coursework", "Term3") * 0.2
+
+        self.coursework_term1_20_percent = get_weighted_average("Coursework", "Term1") * 0.2
+        self.coursework_term2_20_percent = get_weighted_average("Coursework", "Term2") * 0.2
+        self.coursework_term3_20_percent = get_weighted_average("Coursework", "Term3") * 0.2
+
+        # === UNIT TEST (scaled to 30) ===
+        self.unit_test_term1_average_mark = get_weighted_average("Unit Test", "Term1") * 0.3
+        self.unit_test_term2_average_mark = get_weighted_average("Unit Test", "Term2") * 0.3
+        self.unit_test_term3_average_mark = get_weighted_average("Unit Test", "Term3") * 0.3
+
+        self.unit_test_term1_30_percent = get_weighted_average("Unit Test", "Term1") * 0.3
+        self.unit_test_term2_30_percent = get_weighted_average("Unit Test", "Term2") * 0.3
+        self.unit_test_term3_30_percent = get_weighted_average("Unit Test", "Term3") * 0.3
+
+        # === EXAM (scaled to 50) ===
+        self.exam_term1_average_mark = get_weighted_average("Exam", "Term1") * 0.5
+        self.exam_term2_average_mark = get_weighted_average("Exam", "Term2") * 0.5
+        self.exam_term3_average_mark = get_weighted_average("Exam", "Term3") * 0.5
+
+        self.exam_term1_50_percent = get_weighted_average("Exam", "Term1") * 0.5
+        self.exam_term2_50_percent = get_weighted_average("Exam", "Term2") * 0.5
+        self.exam_term3_50_percent = get_weighted_average("Exam", "Term3") * 0.5
+
+        # Total
+         # === Total per term (sum of scaled contributions) ===
+        self.term1_total = (
+            self.coursework_term1_20_percent +
+            self.unit_test_term1_30_percent +
+            self.exam_term1_50_percent
+        )
+        self.term2_total = (
+           self.coursework_term2_20_percent +
+            self.unit_test_term2_30_percent +
+            self.exam_term2_50_percent
+        )
+        self.term3_total = (
+           self.coursework_term3_20_percent +
+            self.unit_test_term3_30_percent +
+            self.exam_term3_50_percent
+        )
+        self.yearly_average_mark = (self.term1_total + self.term2_total + self.term3_total) / 3
+        self.yearly_total_grade = self.get_grade(self.yearly_average_mark)
+
+    def get_grade(grading_scale_name, mark):
+        grading_scale = frappe.get_doc("Grading Scale", grading_scale_name)
+        if not grading_scale:
+            frappe.throw(f"Grading scale '{grading_scale.name}' not found")
+        for interval in grading_scale.intervals:
+            if mark >= interval.threshold:
+                return interval.grade_code
+
 
 @frappe.whitelist()
-def get_term_for_date(report_date):
-    """Return the Academic Term that covers the given date"""
+def get_academic_year(report_date):
+    """Return the Academic Year that covers the given date"""
     date = getdate(report_date)
-    term = frappe.db.sql(
+    year = frappe.db.sql(
         """
         SELECT name
-        FROM `tabAcademic Term`
-        WHERE %s BETWEEN term_start_date AND term_end_date
+        FROM `tabAcademic Year`
+        WHERE %s BETWEEN year_start_date AND year_end_date
         LIMIT 1
         """,
         (date,),
         as_dict=1,
     )
-    return term[0].name if term else None
+    return year[0].name if year else None
+
 
 @frappe.whitelist()
-def get_student_test_averages(student):
+def get_student_program(student, academic_year=None):
     """
-    Get average marks for Coursework, Unit Test, and Exam for a given student
-    Only considers submitted Test Results (docstatus = 1)
+    Fetches the active program for a given student.
+    Optionally filters by academic year.
     """
-    results = frappe.db.sql("""
-        SELECT tr.test_type, AVG(td.mark_earned) as avg_marks
-        FROM `tabTest Result` tr
-        INNER JOIN `tabTest Result Detail` td ON tr.name = td.parent
-        WHERE td.student = %s
-          AND tr.docstatus = 1
-        GROUP BY tr.test_type
-    """, (student,), as_dict=True)
-
-    averages = {
-        "unit_test_percentage": 0,
-        "coursework_percentage": 0,
-        "exam_percentage": 0
+    filters = {
+        "student": student,
+        "docstatus": 1
     }
 
-    for r in results:
-        if r.test_type == "Unit Test":
-            averages["unit_test_percentage"] = r.avg_marks
-        elif r.test_type == "Cousework":   # keep "Cousework" since that’s in your DocType
-            averages["coursework_percentage"] = r.avg_marks
-        elif r.test_type == "Exam":
-            averages["exam_percentage"] = r.avg_marks
+    # Add academic year filter only if provided
+    if academic_year:
+        filters["academic_year"] = academic_year
 
-    return averages
-
-@frappe.whitelist()
-def get_student_program(student):
-    """Fetches the active program for a given student."""
-    program = frappe.db.get_value(
-        "Program Enrollment",
-        {"student": student, "docstatus": 1},
-        "program"
-    )
+    program = frappe.db.get_value("Program Enrollment", filters, "program")
     return program or ""
+
 
 @frappe.whitelist()
 def get_program_courses(doctype, txt, searchfield, start, page_len, filters):
@@ -121,16 +169,14 @@ def get_program_courses(doctype, txt, searchfield, start, page_len, filters):
 
 
 @frappe.whitelist()
-def get_topics_and_comptencies(program, course, term):
+def get_topics_and_comptencies(program, course, academic_year):
     """
     Fetch topics and competencies linked to the given Program, Course, and Academic Term.
     The Academic Year is automatically derived from the selected Term.
     """
-    if not (program and course and term):
-        frappe.throw(_("Please select Program, Course, and Academic Term."))
+    if not (program and course and academic_year):
+        frappe.throw(_("Please select Program, Course, and Academic Year."))
 
-    # 🔹 Get the Academic Year from the selected Term
-    academic_year = frappe.db.get_value("Academic Term", term, "academic_year")
     if not academic_year:
         frappe.throw(_("The selected Term is not linked to any Academic Year."))
 
@@ -187,3 +233,4 @@ def get_grade_codes(grading_scale):
 
     grading_scale_doc = frappe.get_doc("Grading Scale", grading_scale)
     return [d.grade_code for d in grading_scale_doc.intervals]
+

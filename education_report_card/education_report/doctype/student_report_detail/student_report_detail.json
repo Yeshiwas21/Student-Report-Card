@@ -32,7 +32,7 @@
    "read_only": 1
   },
   {
-   "columns": 2,
+   "columns": 1,
    "fieldname": "grading_scale",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -45,7 +45,8 @@
    "fieldname": "term1",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Term 1",
+   "label": "Term1",
+   "non_negative": 1,
    "read_only_depends_on": "eval:!doc.topic_name || !doc.competency || !doc.grading_scale"
   },
   {
@@ -53,7 +54,8 @@
    "fieldname": "term2",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Term 2",
+   "label": "Term2",
+   "non_negative": 1,
    "read_only_depends_on": "eval:!doc.topic_name || !doc.competency || !doc.grading_scale"
   },
   {
@@ -61,14 +63,15 @@
    "fieldname": "term3",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Term 3",
+   "label": "Term3",
+   "non_negative": 1,
    "read_only_depends_on": "eval:!doc.topic_name || !doc.competency || !doc.grading_scale"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2025-10-03 19:45:28.372641",
- "modified_by": "yeshiwas@gmail.com",
+ "modified": "2025-10-16 18:23:32.390803",
+ "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report Detail",
  "owner": "Administrator",
