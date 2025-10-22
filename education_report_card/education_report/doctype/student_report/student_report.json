@@ -73,6 +73,7 @@
    "fieldname": "program",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Program/Grade",
    "options": "Program",
    "read_only": 1,
@@ -82,6 +83,7 @@
    "fieldname": "course",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Course / Subject",
    "options": "Course",
    "reqd": 1
@@ -97,6 +99,7 @@
    "fieldname": "student",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Student",
    "options": "Student",
    "reqd": 1
@@ -174,6 +177,8 @@
   {
    "fieldname": "academic_year",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Academic Year",
    "options": "Academic Year",
    "reqd": 1
@@ -403,7 +408,7 @@
   }
  ],
  "links": [],
- "modified": "2025-10-16 20:55:01.649334",
+ "modified": "2025-10-20 13:37:19.864252",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",
