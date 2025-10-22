@@ -12,14 +12,17 @@
   "column_break_zven",
   "company",
   "academic_year",
+  "program",
   "messages_section",
   "introduction_france",
   "introduction_english",
-  "conclusion",
   "term_notescomments_section",
   "term1_comment",
   "term2_comment",
-  "term3_comment"
+  "term3_comment",
+  "cnnclusion_section",
+  "conclusion_fr",
+  "conclusion_en"
  ],
  "fields": [
   {
@@ -84,11 +87,6 @@
    "label": "Messages"
   },
   {
-   "fieldname": "conclusion",
-   "fieldtype": "Long Text",
-   "label": "Conclusion"
-  },
-  {
    "fieldname": "company",
    "fieldtype": "Link",
    "label": "Company",
@@ -104,12 +102,34 @@
    "fieldname": "introduction_english",
    "fieldtype": "Long Text",
    "label": "Introduction in English"
+  },
+  {
+   "fieldname": "cnnclusion_section",
+   "fieldtype": "Section Break",
+   "label": "Cnnclusion"
+  },
+  {
+   "fieldname": "conclusion_fr",
+   "fieldtype": "Long Text",
+   "label": "Conclusion in France"
+  },
+  {
+   "fieldname": "conclusion_en",
+   "fieldtype": "Long Text",
+   "label": "Conclusion in English"
+  },
+  {
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "label": "Program/Grade",
+   "options": "Program",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-21 11:32:52.936852",
+ "modified": "2025-10-22 10:45:07.893209",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Director Message",

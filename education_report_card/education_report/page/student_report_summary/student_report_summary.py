@@ -219,12 +219,12 @@ def get_term_and_director_comments(student, program, academic_year):
     return comments
 
 @frappe.whitelist()
-def get_director_message(academic_year):
+def get_director_message(academic_year, program):
     """Fetch both introduction and conclusion messages for the selected academic year."""
     director_message = frappe.db.get_value(
         "Director Message",
-        {"academic_year": academic_year},
-        ["director_name", "introduction_france", "introduction_english," "conclusion", "company"],
+        {"academic_year": academic_year, "program":program},
+        ["director_name", "introduction_france", "introduction_english", "conclusion_fr", "conclusion_en","company"],
         as_dict=True
     )
     return director_message or {}
