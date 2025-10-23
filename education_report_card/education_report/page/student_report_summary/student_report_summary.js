@@ -11,14 +11,15 @@ frappe.pages['student-report-summary'].on_page_load = function (wrapper) {
 	$('#load_reports').on('click', function () {
 		const academicYear = $('#academic_year').val();
 		const program = $('#program').val();
-		if (!academicYear) {
-			frappe.msgprint("Please select an Academic Year to load the report.");
-			return;
-		}
 		if (!program) {
 			frappe.msgprint("Please select a Program to load the report.");
 			return;
 		}
+		if (!academicYear) {
+			frappe.msgprint("Please select an Academic Year to load the report.");
+			return;
+		}
+
 		load_reports();
 	});
 
@@ -54,13 +55,20 @@ frappe.pages['student-report-summary'].on_page_load = function (wrapper) {
         `);
 			w.document.write('</style></head><body>');
 
-			// --- Director Introduction ---
+			const selectedProgram = $('#program').val();
+			if (selectedProgram) {
+				w.document.write(`
+					<h2 style="text-align: center; font-size: 28pt; font-weight: bold; margin-bottom: 30px;">
+						${selectedProgram} Report Card
+					</h2>
+				`);
+			}
+
 			const directorIntro = reportOutput.find('.director-intro-fr, .director-intro-en').clone();
 			directorIntro.each(function () {
 				w.document.write($(this).prop('outerHTML'));
 			});
 
-			// --- Student Info (once) ---
 			const firstCard = reportOutput.find('.student-report-card').first();
 			if (firstCard.length) {
 				const studentHtml = `
@@ -73,22 +81,18 @@ frappe.pages['student-report-summary'].on_page_load = function (wrapper) {
 				w.document.write(studentHtml);
 			}
 
-			// --- Course Reports with Summaries ---
 			const studentReports = reportOutput.find('.student-report-card');
 			studentReports.each(function () {
 				const courseSection = $(this).clone();
-				// Remove repeated student header from each course
 				courseSection.find('.flex').remove();
 				w.document.write(`<div class="course-section">${courseSection.html()}</div>`);
 			});
 
-			// --- Overall Grades & Comments ---
 			const overallAndComments = reportOutput.find('.overall-summary, .comments-section').clone();
 			overallAndComments.each(function () {
 				w.document.write($(this).prop('outerHTML'));
 			});
 
-			// --- Director Conclusion ---
 			const directorConclusion = reportOutput.find('.director-conclusion-fr, .director-conclusion-en').clone();
 			directorConclusion.each(function () {
 				w.document.write($(this).prop('outerHTML'));
@@ -155,7 +159,6 @@ function render_reports(data) {
 	const processed_students = new Set();
 	const selectedStudent = $('#student').val();
 
-	// --- Group data
 	data.forEach(row => {
 		const academic_year = row.academic_year || "Unknown Academic Year";
 		const program = row.program || "Unknown Program";
@@ -180,10 +183,8 @@ function render_reports(data) {
 		});
 	});
 
-	// --- Fetch Director Message for the first academic year and selected program
-	const firstAcademicYear = data[0]?.academic_year;
 	const program = $('#program').val();
-
+	const firstAcademicYear = data[0]?.academic_year;
 	if (firstAcademicYear && selectedStudent && program) {
 		frappe.call({
 			method: "education_report_card.education_report.page.student_report_summary.student_report_summary.get_director_message",
@@ -199,23 +200,20 @@ function render_reports(data) {
 					if (intro_fr) {
 						const header_france = "Message de la Directrice de l’école.";
 						intro_html += `
-                            <div class="director-intro-fr bg-white border-2 border-gray-800 rounded-lg p-6 mb-6" 
-                                style="font-family: 'Times New Roman', serif; line-height: 1.6;">
+                            <div class="director-intro-fr bg-white border-2 border-gray-800 rounded-lg p-6 mb-6">
                                 <h2 style="text-align: center; font-weight: bold; font-size: 20pt; margin-bottom: 20px;">
                                     ${header_france}
                                 </h2>
                                 <p style="text-align: justify; font-size: 12pt; margin-bottom: 20px;">
                                     ${intro_fr}
                                 </p>
-                            </div>
-                        `;
+                            </div>`;
 					}
 
 					if (intro_en) {
 						const header_english = "Message from the School Director.";
 						intro_html += `
-                            <div class="director-intro-en bg-white border-2 border-gray-800 rounded-lg p-6 mb-6" 
-                                style="font-family: 'Times New Roman', serif; line-height: 1.6;">
+                            <div class="director-intro-en bg-white border-2 border-gray-800 rounded-lg p-6 mb-6">
                                 <h2 style="text-align: center; font-weight: bold; font-size: 20pt; margin-bottom: 20px;">
                                     ${header_english}
                                 </h2>
@@ -227,8 +225,7 @@ function render_reports(data) {
                                     <span><b>${director}</b></span><br>
                                     <span>Principal / Directeur</span>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
 					}
 
 					if (intro_html) {
@@ -236,7 +233,6 @@ function render_reports(data) {
 					}
 				}
 
-				// Render student report cards
 				render_student_cards(grouped, selectedStudent, processed_students);
 			}
 		});
@@ -288,10 +284,8 @@ function render_student_cards(grouped, selectedStudent, processed_students) {
 				}
 
 				html += `</tbody></table></div>`;
-
 				$('#report_output').append(html);
 
-				// --- Load course summary
 				if (show_summary) {
 					frappe.call({
 						method: "education_report_card.education_report.page.student_report_summary.student_report_summary.get_course_summary",
@@ -304,14 +298,13 @@ function render_student_cards(grouped, selectedStudent, processed_students) {
                                 <tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || 0}</td><td>${sr.unit_test?.[1] || 0}</td><td>${sr.unit_test?.[2] || 0}</td></tr>
                                 <tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
                                 <tr><td>TRIMESTER TOTAL</td><td>100%</td><td>${sr.trimester_total?.[0] || 0}</td><td>${sr.trimester_total?.[1] || 0}</td><td>${sr.trimester_total?.[2] || 0}</td></tr>
-                                <tr><td>YEARLY TOTAL GRADE</td><td colspan="4">${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</td></tr>
-                            `;
+                                <tr><td>YEARLY TOTAL GRADE</td><td colspan="4">${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</td></tr>`;
 							$(`#summary_${g.student}_${course.replace(/\s+/g, '_')}`).replaceWith(summaryHtml);
 						}
 					});
 				}
 
-				// --- Overall summary & comments
+				// --- Overall summary & comments ---
 				if (selectedStudent && !processed_students.has(g.student)) {
 					processed_students.add(g.student);
 
@@ -323,35 +316,37 @@ function render_student_cards(grouped, selectedStudent, processed_students) {
 								const { term1_avg, term2_avg, term3_avg, yearly_average } = res.message;
 								const yearlyAvg = yearly_average !== undefined ? yearly_average : ((term1_avg || 0) + (term2_avg || 0) + (term3_avg || 0)) / 3;
 
-								const overall_html = `
-                                    <div class="overall-summary bg-white border border-black rounded-lg p-4 mt-6 text-sm">
-                                        <table class="table table-bordered w-auto text-sm border border-black">
-                                            <thead class="bg-gray-100">
-                                                <tr>
-                                                    <th>OVERALL GRADES:</th>
-                                                    <th class="text-center">Term1</th>
-                                                    <th class="text-center">Term2</th>
-                                                    <th class="text-center">Term3</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="font-medium">TRIMESTER AVERAGE / Moyenne trimestrielle</td>
-                                                    <td class="text-center">${term1_avg || 0}%</td>
-                                                    <td class="text-center">${term2_avg || 0}%</td>
-                                                    <td class="text-center">${term3_avg || 0}%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="font-medium">Yearly Average / Moyenne de l’année</td>
-                                                    <td class="text-center" colspan="3">${yearlyAvg.toFixed(2)}%</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>`;
+								// ✅ Only show overall grade when show_summary = true
+								if (show_summary) {
+									const overall_html = `
+										<div class="overall-summary bg-white border border-black rounded-lg p-4 mt-6 text-sm">
+											<table class="table table-bordered w-auto text-sm border border-black">
+												<thead class="bg-gray-100">
+													<tr>
+														<th>OVERALL GRADES:</th>
+														<th class="text-center">Term1</th>
+														<th class="text-center">Term2</th>
+														<th class="text-center">Term3</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td class="font-medium">TRIMESTER AVERAGE / Moyenne trimestrielle</td>
+														<td class="text-center">${term1_avg || 0}%</td>
+														<td class="text-center">${term2_avg || 0}%</td>
+														<td class="text-center">${term3_avg || 0}%</td>
+													</tr>
+													<tr>
+														<td class="font-medium">Yearly Average / Moyenne de l’année</td>
+														<td class="text-center" colspan="3">${yearlyAvg.toFixed(2)}%</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>`;
+									$('#report_output').append(overall_html);
+								}
 
-								$('#report_output').append(overall_html);
-
-								// Load comments
+								// ✅ Always load comments (even if show_summary = false)
 								frappe.call({
 									method: "education_report_card.education_report.page.student_report_summary.student_report_summary.get_term_and_director_comments",
 									args: { student: g.student, program: g.program, academic_year: g.academic_year },
@@ -359,61 +354,64 @@ function render_student_cards(grouped, selectedStudent, processed_students) {
 										if (r2.message) {
 											const t = r2.message.teacher;
 											const d = r2.message.director;
+
 											const comments_html = `
-                                                <div class="comments-section mt-6 border border-black rounded-lg p-4">
-                                                    <h4><b>Homeroom Teacher’s Comment / Commentaires du Titulaire :</b></h4>
-                                                    <p><b>T-1:</b> ${t.term1 || ".................................................."}<br><br>
-                                                    <b>T-2:</b> ${t.term2 || ".................................................."}<br><br>
-                                                    <b>T-3:</b> ${t.term3 || ".................................................."}<br><br>
-                                                    <b>Name:</b> ${t.teacher_name || "..........................................."} &nbsp;&nbsp; <b>(Sign)</b> ...........................................
-                                                    <hr>
-                                                    <h4><b>Principal’s Note / Remarque du Directeur :</b></h4>
-                                                    <p><b>T1:</b> ${d.term1 || ".................................................."}<br><br>
-                                                    <b>T2:</b> ${d.term2 || ".................................................."}<br><br>
-                                                    <b>T3:</b> ${d.term3 || ".................................................."}<br><br>
-                                                    <b>Name:</b> ${d.director_name || "..........................................."} &nbsp;&nbsp; <b>(Sign)</b> ...........................................
-                                                </div>`;
+												<div class="comments-section bg-white border-2 border-gray-800 rounded-lg p-6 mt-8 text-sm">
+													<h4><b>Homeroom Teacher’s Comment / Commentaires du Titulaire :</b></h4>
+													<p>
+														T1: ${t.term1 || ".................................................."}<br>
+														T2: ${t.term2 || ".................................................."}<br>
+														T3: ${t.term3 || ".................................................."}<br><br>
+														<b>Name:</b> ${t.teacher_name || "..........................................."} &nbsp;&nbsp;
+														<b>(Sign)</b> ...........................................
+													</p>
+													<hr>
+													<h4><b>Principal’s Note / Remarque du Directeur :</b></h4>
+													<p>
+														T1: ${d.term1 || ".................................................."}<br>
+														T2: ${d.term2 || ".................................................."}<br>
+														T3: ${d.term3 || ".................................................."}<br><br>
+														<b>Name:</b> ${d.director_name || "..........................................."} &nbsp;&nbsp;
+														<b>(Sign)</b> ...........................................
+													</p>
+												</div>`;
 											$('#report_output').append(comments_html);
 
-											// Director conclusion
+											// ✅ Fetch director introduction & conclusion
 											frappe.call({
 												method: "education_report_card.education_report.page.student_report_summary.student_report_summary.get_director_message",
 												args: { academic_year: g.academic_year, program: g.program },
 												callback: function (r3) {
 													if (r3.message) {
-														const conclusion_fr = r3.message.conclusion_fr?.trim();
-														const conclusion_en = r3.message.conclusion_en?.trim();
-
-														let director_conclusion_html = '';
-
+														const msg = r3.message;
+														const intro_fr = msg.introduction_france?.trim();
+														const intro_en = msg.introduction_english?.trim();
+														const conclusion_fr = msg.conclusion_fr?.trim();
+														const conclusion_en = msg.conclusion_en?.trim();
 														if (conclusion_fr) {
-															const conclusion_france = "Décision finale"
-															director_conclusion_html += `
-															<div class="director-conclusion-fr mt-6 mb-10" style="font-family: 'Times New Roman', serif;">
-																<h2 style="text-align: left; font-weight: bold; font-size: 20pt; margin-bottom: 20px;">
-																	${conclusion_france}
+															$('#report_output').append(`
+															<div class="director-conclusion-fr bg-white border-2 border-gray-800 rounded-lg p-6 mt-8">
+																<h2 style="text-align:left; font-weight:bold; font-size:18pt; margin-bottom:20px;">
+																	Décision finale
 																</h2>
-																<p style="text-align: justify; font-size: 12pt; margin-bottom: 40px;">
+																<p style="text-align:justify; font-size:12pt; margin-bottom:30px;">
 																	${conclusion_fr}
-															</div>`;
+																</p>
+					
+															</div>`);
 														}
 
 														if (conclusion_en) {
-															const conclusion_english = "Finale decision"
-															director_conclusion_html += `
-															<div class="director-conclusion-en mt-6 mb-10" style="font-family: 'Times New Roman', serif;">
-
-															<h2 style="text-align: left; font-weight: bold; font-size: 20pt; margin-bottom: 20px;">
-																${conclusion_english}
-															</h2>
-															<p style="text-align: justify; font-size: 12pt; margin-bottom: 40px;">
-																${conclusion_en}
-															</p>
-															</div>`;
-														}
-
-														if (director_conclusion_html) {
-															$('#report_output').append(director_conclusion_html);
+															$('#report_output').append(`
+															<div class="director-conclusion-en bg-white border-2 border-gray-800 rounded-lg p-6 mt-8">
+																<h2 style="text-align:left; font-weight:bold; font-size:18pt; margin-bottom:20px;">
+																	Finale decision
+																</h2>
+																<p style="text-align:justify; font-size:12pt; margin-bottom:30px;">
+																	${conclusion_en}
+																</p>
+													
+															</div>`);
 														}
 													}
 												}
@@ -421,6 +419,7 @@ function render_student_cards(grouped, selectedStudent, processed_students) {
 										}
 									}
 								});
+
 							}
 						}
 					});

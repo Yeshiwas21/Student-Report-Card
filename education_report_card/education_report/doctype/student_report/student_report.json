@@ -400,6 +400,7 @@
    "read_only": 1
   },
   {
+   "description": "This will be used for overall grade in report summary page",
    "fieldname": "grading_scale",
    "fieldtype": "Link",
    "label": "Grading Scale",
@@ -408,7 +409,7 @@
   }
  ],
  "links": [],
- "modified": "2025-10-20 13:37:19.864252",
+ "modified": "2025-10-23 14:05:00.627399",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",

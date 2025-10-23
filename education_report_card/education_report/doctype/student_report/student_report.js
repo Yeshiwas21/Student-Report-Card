@@ -2,7 +2,13 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Student Report", {
-
+    setup(frm) {
+        frm.set_query("teacher", {
+            filters: {
+                status: "Active"
+            }
+        })
+    },
     onload(frm) {
 
         const grid = frm.fields_dict.student_report_detail.grid;

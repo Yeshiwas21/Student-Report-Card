@@ -2,6 +2,13 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Test Result', {
+    setup(frm) {
+        frm.set_query("teacher", {
+            filters: {
+                status: "Active"
+            }
+        })
+    },
     onload: function (frm) {
         const grid = frm.fields_dict.test_detail.grid;
 
