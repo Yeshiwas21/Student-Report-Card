@@ -18,8 +18,6 @@
   "grading_scale",
   "section_break_dxze",
   "student_report_detail",
-  "section_break_ldpy",
-  "student_report_grade",
   "section_break_runa",
   "column_break_bfgw",
   "coursework_term1_average_mark",
@@ -162,19 +160,6 @@
    "read_only": 1
   },
   {
-   "depends_on": "eval:doc.show_grade",
-   "fieldname": "section_break_ldpy",
-   "fieldtype": "Section Break",
-   "label": "Grade"
-  },
-  {
-   "fieldname": "student_report_grade",
-   "fieldtype": "Table",
-   "label": "Term's Grade Detail",
-   "options": "Student Report Detail Grade",
-   "read_only": 1
-  },
-  {
    "fieldname": "academic_year",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -205,21 +190,21 @@
    "default": "0",
    "fieldname": "unit_test_term1_average_mark",
    "fieldtype": "Float",
-   "label": "Term1  Average Mark",
+   "label": "Term 1  Average Mark",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "unit_test_term2_average_mark",
    "fieldtype": "Float",
-   "label": "Term2  Average Mark",
+   "label": "Term 2  Average Mark",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "unit_test_term3_average_mark",
    "fieldtype": "Float",
-   "label": "Term3  Average Mark",
+   "label": "Term 3  Average Mark",
    "read_only": 1
   },
   {
@@ -242,14 +227,14 @@
    "default": "0",
    "fieldname": "coursework_term1_average_mark",
    "fieldtype": "Float",
-   "label": "Term1 Average Mark",
+   "label": "Term 1 Average Mark",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "coursework_term2_average_mark",
    "fieldtype": "Float",
-   "label": "Term2 Average Mark",
+   "label": "Term 2 Average Mark",
    "read_only": 1
   },
   {
@@ -260,7 +245,7 @@
    "default": "0",
    "fieldname": "coursework_term3_average_mark",
    "fieldtype": "Float",
-   "label": "Term3 Average Mark",
+   "label": "Term 3 Average Mark",
    "read_only": 1
   },
   {
@@ -282,63 +267,63 @@
    "default": "0",
    "fieldname": "coursework_term1_20_percent",
    "fieldtype": "Float",
-   "label": "Term1 20%",
+   "label": "Term 1 20%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "coursework_term2_20_percent",
    "fieldtype": "Float",
-   "label": "Term2 20%",
+   "label": "Term 2 20%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "coursework_term3_20_percent",
    "fieldtype": "Float",
-   "label": "Term3 20%",
+   "label": "Term 3 20%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "unit_test_term1_30_percent",
    "fieldtype": "Float",
-   "label": "Term1 30%",
+   "label": "Term 1 30%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "unit_test_term2_30_percent",
    "fieldtype": "Float",
-   "label": "Term2 30%",
+   "label": "Term 2 30%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "unit_test_term3_30_percent",
    "fieldtype": "Float",
-   "label": "Term3 30%",
+   "label": "Term 3 30%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "exam_term1_50_percent",
    "fieldtype": "Float",
-   "label": "Term1 50%",
+   "label": "Term 1 50%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "exam_term2_50_percent",
    "fieldtype": "Float",
-   "label": "Term2 50%",
+   "label": "Term 2 50%",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "exam_term3_50_percent",
    "fieldtype": "Float",
-   "label": "Term3 50%",
+   "label": "Term 3 50%",
    "read_only": 1
   },
   {
@@ -350,7 +335,7 @@
    "default": "0",
    "fieldname": "term1_total",
    "fieldtype": "Float",
-   "label": "Term1 Total",
+   "label": "Term 1 Total",
    "read_only": 1
   },
   {
@@ -361,14 +346,14 @@
    "default": "0",
    "fieldname": "term2_total",
    "fieldtype": "Float",
-   "label": "Term2 Total",
+   "label": "Term 2 Total",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "term3_total",
    "fieldtype": "Float",
-   "label": "Term3 Total",
+   "label": "Term 3 Total",
    "read_only": 1
   },
   {
@@ -382,21 +367,21 @@
    "default": "0",
    "fieldname": "exam_term1_average_mark",
    "fieldtype": "Float",
-   "label": "Term1 Average Mark",
+   "label": "Term 1 Average Mark",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "exam_term2_average_mark",
    "fieldtype": "Float",
-   "label": "Term2 Average Mark",
+   "label": "Term 2 Average Mark",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "exam_term3_average_mark",
    "fieldtype": "Float",
-   "label": "Term3 Average Mark",
+   "label": "Term 3 Average Mark",
    "read_only": 1
   },
   {
@@ -409,7 +394,7 @@
   }
  ],
  "links": [],
- "modified": "2025-10-23 14:05:00.627399",
+ "modified": "2025-10-24 08:13:17.361042",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",

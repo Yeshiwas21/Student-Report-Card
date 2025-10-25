@@ -58,31 +58,31 @@ class StudentReport(Document):
             return (total_earned / total_possible) * 100
 
         # === COURSEWORK (scaled to 20) ===
-        self.coursework_term1_average_mark = get_weighted_average("Coursework", "Term1") * 0.2
-        self.coursework_term2_average_mark = get_weighted_average("Coursework", "Term2") * 0.2
-        self.coursework_term3_average_mark = get_weighted_average("Coursework", "Term3") * 0.2
+        self.coursework_term1_average_mark = get_weighted_average("Coursework", "Term 1") * 0.2
+        self.coursework_term2_average_mark = get_weighted_average("Coursework", "Term 2") * 0.2
+        self.coursework_term3_average_mark = get_weighted_average("Coursework", "Term 3") * 0.2
 
-        self.coursework_term1_20_percent = get_weighted_average("Coursework", "Term1") * 0.2
-        self.coursework_term2_20_percent = get_weighted_average("Coursework", "Term2") * 0.2
-        self.coursework_term3_20_percent = get_weighted_average("Coursework", "Term3") * 0.2
+        self.coursework_term1_20_percent = get_weighted_average("Coursework", "Term 1") * 0.2
+        self.coursework_term2_20_percent = get_weighted_average("Coursework", "Term 2") * 0.2
+        self.coursework_term3_20_percent = get_weighted_average("Coursework", "Term 3") * 0.2
 
         # === UNIT TEST (scaled to 30) ===
-        self.unit_test_term1_average_mark = get_weighted_average("Unit Test", "Term1") * 0.3
-        self.unit_test_term2_average_mark = get_weighted_average("Unit Test", "Term2") * 0.3
-        self.unit_test_term3_average_mark = get_weighted_average("Unit Test", "Term3") * 0.3
+        self.unit_test_term1_average_mark = get_weighted_average("Unit Test", "Term 1") * 0.3
+        self.unit_test_term2_average_mark = get_weighted_average("Unit Test", "Term 2") * 0.3
+        self.unit_test_term3_average_mark = get_weighted_average("Unit Test", "Term 3") * 0.3
 
-        self.unit_test_term1_30_percent = get_weighted_average("Unit Test", "Term1") * 0.3
-        self.unit_test_term2_30_percent = get_weighted_average("Unit Test", "Term2") * 0.3
-        self.unit_test_term3_30_percent = get_weighted_average("Unit Test", "Term3") * 0.3
+        self.unit_test_term1_30_percent = get_weighted_average("Unit Test", "Term 1") * 0.3
+        self.unit_test_term2_30_percent = get_weighted_average("Unit Test", "Term 2") * 0.3
+        self.unit_test_term3_30_percent = get_weighted_average("Unit Test", "Term 3") * 0.3
 
         # === EXAM (scaled to 50) ===
-        self.exam_term1_average_mark = get_weighted_average("Exam", "Term1") * 0.5
-        self.exam_term2_average_mark = get_weighted_average("Exam", "Term2") * 0.5
-        self.exam_term3_average_mark = get_weighted_average("Exam", "Term3") * 0.5
+        self.exam_term1_average_mark = get_weighted_average("Exam", "Term 1") * 0.5
+        self.exam_term2_average_mark = get_weighted_average("Exam", "Term 2") * 0.5
+        self.exam_term3_average_mark = get_weighted_average("Exam", "Term 3") * 0.5
 
-        self.exam_term1_50_percent = get_weighted_average("Exam", "Term1") * 0.5
-        self.exam_term2_50_percent = get_weighted_average("Exam", "Term2") * 0.5
-        self.exam_term3_50_percent = get_weighted_average("Exam", "Term3") * 0.5
+        self.exam_term1_50_percent = get_weighted_average("Exam", "Term 1") * 0.5
+        self.exam_term2_50_percent = get_weighted_average("Exam", "Term 2") * 0.5
+        self.exam_term3_50_percent = get_weighted_average("Exam", "Term 3") * 0.5
 
         # Total
          # === Total per term (sum of scaled contributions) ===

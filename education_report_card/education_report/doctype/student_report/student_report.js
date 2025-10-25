@@ -8,6 +8,11 @@ frappe.ui.form.on("Student Report", {
                 status: "Active"
             }
         })
+        frm.set_query("student", {
+            filters: {
+                enabled: 1
+            }
+        })
     },
     onload(frm) {
 

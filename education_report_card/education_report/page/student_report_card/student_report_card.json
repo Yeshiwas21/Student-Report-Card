@@ -7,9 +7,9 @@
     "modified": "2025-10-11 10:30:10.528154",
     "modified_by": "Administrator",
     "module": "Education Report",
-    "name": "student-report-summary",
+    "name": "student-report-card",
     "owner": "Administrator",
-    "page_name": "student-report-summary",
+    "page_name": "student-report-card",
     "roles": [
         {
             "role": "System Manager"
@@ -25,5 +25,5 @@
     "standard": "Yes",
     "style": null,
     "system_page": 0,
-    "title": "Student Report Summary"
+    "title": "Student Report Card"
 }
