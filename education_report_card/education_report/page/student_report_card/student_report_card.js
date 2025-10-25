@@ -54,20 +54,23 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 		let w = window.open('', '', 'height=900,width=1100');
 		w.document.write('<html><head><title>Student Report</title><style>');
 		w.document.write(`
-        body { font-family: 'Times New Roman', serif; margin: 20px; font-size: 12pt; }
+        body { font-family: 'Times New Roman', serif; margin: 25px; font-size: 12pt; color: #000; }
         table { border-collapse: collapse; width: 100%; margin-bottom: 15px; font-size: 12pt; }
         table, th, td { border: 1px solid black; }
         th, td { padding: 6px; text-align: left; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        h2, h3 { text-align: center; margin: 10px 0; }
-        .course-section, .overall-summary, .comments-section, 
-        .director-intro-fr, .director-intro-en, 
-        .director-conclusion-fr, .director-conclusion-en { 
-            margin-top: 20px; page-break-inside: avoid; padding: 10px; 
-            border: 1px solid black; border-radius: 5px; 
+        th { background-color: #f5f5f5; font-weight: bold; }
+        h1, h2, h3, h4 { text-align: center; margin: 10px 0; }
+        .course-section, .overall-summary, .comments-section,
+        .director-intro-fr, .director-intro-en,
+        .director-conclusion-fr, .director-conclusion-en {
+            margin-top: 20px; page-break-inside: avoid; padding: 10px;
+            border: 1px solid #000; border-radius: 6px;
         }
-        .student-header { margin-bottom: 20px; }
+        .student-header { margin: 15px 0; font-size: 13pt; }
         .student-header div { margin-bottom: 5px; }
+        .course-summary-table { margin-top: 5px; border: 1px solid #000; }
+        .course-summary-table th, .course-summary-table td { text-align: center; }
+        .course-summary-table th { background-color: #f0f0f0; }
         @media print {
             body { margin: 0; }
             table { page-break-inside: auto; }
@@ -75,6 +78,9 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
         }
     `);
 		w.document.write('</style></head><body>');
+
+		// --- Report Title ---
+		w.document.write(`<h1>${program} Report Card</h1>`);
 
 		// --- Director Introduction ---
 		frappe.call({
@@ -94,9 +100,9 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 					w.document.write(`<div class="director-intro-en">
                     <h2>Message from the School Director</h2>
                     <p style="text-align: justify;">${directorMsg.introduction_english}</p>
-                    <div style="text-align:right;">
+                    <div style="text-align:right; margin-top:20px;">
                         <span>__________________________</span><br>
-                        <span><b>${directorMsg.director_name || ""}</b></span><br>
+                        <b>${directorMsg.director_name || ""}</b><br>
                         <span>Principal / Directeur</span>
                     </div>
                 </div>`);
@@ -137,16 +143,15 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 							if (i >= courses.length) return renderOverallGrades();
 
 							const [course, courseData] = courses[i];
-							w.document.write(`<div class="course-section"><h3>Course: ${course}</h3>`);
+							w.document.write(`<div class="course-section"><h3>Course/Subject: ${course}</h3>`);
 
-							// --- Group topics for competency table ---
+							// --- Group topics ---
 							let topicGroups = {};
 							courseData.topics.forEach(c => {
 								if (!topicGroups[c.topic_name]) topicGroups[c.topic_name] = [];
 								topicGroups[c.topic_name].push(c);
 							});
 
-							// --- Only render table if there is at least one competency ---
 							const hasCompetency = Object.values(topicGroups).some(comps =>
 								comps.some(c => c.competency && c.competency.trim() !== "")
 							);
@@ -182,7 +187,6 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 										w.document.write('</tr>');
 									});
 								}
-
 								w.document.write(`</tbody></table>`);
 							}
 
@@ -194,25 +198,28 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 								callback: function (summary) {
 									const sr = summary.message || {};
 									w.document.write(`
-                                    <table style="margin-top:5px;">
+                                    <table class="course-summary-table">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">COURSE SUMMARY</th>
+                                                <th>Term 1</th><th>Term 2</th><th>Term 3</th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
-                                            <tr><td colspan="2"><b>COURSE SUMMARY</b></td><td><b>Term 1</b></td><td><b>Term 2</b></td><td><b>Term 3</b></td></tr>
                                             <tr><td>COURSEWORK</td><td>20%</td><td>${sr.coursework?.[0] || 0}</td><td>${sr.coursework?.[1] || 0}</td><td>${sr.coursework?.[2] || 0}</td></tr>
                                             <tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || 0}</td><td>${sr.unit_test?.[1] || 0}</td><td>${sr.unit_test?.[2] || 0}</td></tr>
-                                            <tr> <td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
-                                            <tr><td>TRIMESTER TOTAL</td><td>100%</td><td>${sr.trimester_total?.[0] || 0}</td><td>${sr.trimester_total?.[1] || 0}</td><td>${sr.trimester_total?.[2] || 0}</td></tr>
-                                            <tr><td>YEARLY TOTAL GRADE</td><td colspan="4">${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</td></tr>
+                                            <tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
+                                            <tr><td><b>TRIMESTER TOTAL</b></td><td><b>100%</b></td><td><b>${sr.trimester_total?.[0] || 0}</b></td><td><b>${sr.trimester_total?.[1] || 0}</b></td><td><b>${sr.trimester_total?.[2] || 0}</b></td></tr>
+                                            <tr><td colspan="2"><b>YEARLY TOTAL GRADE</b></td><td colspan="3"><b>${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</b></td></tr>
                                         </tbody>
                                     </table>
                                 `);
-									w.document.write(`</div>`); // close course-section
+									w.document.write(`</div>`);
 									renderCourse(i + 1);
 								}
 							});
-
 						})(0);
 
-						// --- Overall Grades & Comments ---
 						function renderOverallGrades() {
 							frappe.call({
 								method: "education_report_card.education_report.page.student_report_card.student_report_card.get_overall_term_averages",
@@ -221,7 +228,6 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 									const o = res3.message || {};
 									const yearlyAvg = o.yearly_avg || ((o.term1_avg || 0) + (o.term2_avg || 0) + (o.term3_avg || 0)) / 3;
 
-									// Overall Grades Table
 									w.document.write(`
                                     <div class="overall-summary">
                                         <table>
@@ -231,20 +237,20 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
                                             <tbody>
                                                 <tr>
                                                     <td>TRIMESTER AVERAGE / Moyenne trimestrielle</td>
-                                                    <td class="text-center">${o.term1_avg || 0}%</td>
-                                                    <td class="text-center">${o.term2_avg || 0}%</td>
-                                                    <td class="text-center">${o.term3_avg || 0}%</td>
+                                                    <td>${o.term1_avg || 0}%</td>
+                                                    <td>${o.term2_avg || 0}%</td>
+                                                    <td>${o.term3_avg || 0}%</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Yearly Average / Moyenne de l’année</td>
-                                                    <td colspan="3" class="text-center">${yearlyAvg.toFixed(2)}%</td>
+                                                    <td><b>Yearly Average / Moyenne de l’année</b></td>
+                                                    <td colspan="3"><b>${yearlyAvg.toFixed(2)}%</b></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 `);
 
-									// Comments
+									// --- Comments ---
 									frappe.call({
 										method: "education_report_card.education_report.page.student_report_card.student_report_card.get_term_and_director_comments",
 										args: { student, program, academic_year: academicYear },
@@ -274,7 +280,6 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
                                             </div>
                                         `);
 
-											// Director Conclusion
 											if (directorMsg.conclusion_fr) {
 												w.document.write(`<div class="director-conclusion-fr">
                                                 <h3>Décision finale</h3>
@@ -288,7 +293,6 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
                                             </div>`);
 											}
 
-											// Finish
 											w.document.write('</body></html>');
 											w.document.close();
 											setTimeout(() => { w.print(); w.onafterprint = () => w.close(); }, 600);
@@ -297,13 +301,11 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 								}
 							});
 						}
-
 					}
 				});
 			}
 		});
 	});
-
 
 
 };
@@ -664,7 +666,7 @@ function render_student_courses(g) {
                     <div style="font-size: 16pt; font-weight: bold; margin-bottom: 6px;">Academic Year: ${g.academic_year}</div>
                     <div style="font-size: 16pt; font-weight: bold; margin-bottom: 6px;">Program/Grade: ${g.program}</div>
                     <div style="font-size: 16pt; font-weight: bold; margin-bottom: 6px;">Student: ${g.student}${g.student_name ? ' (' + g.student_name + ')' : ''}</div>
-                    <div style="font-size: 16pt; font-weight: bold; margin-bottom: 12px;">Course: ${course}</div>
+                    <div style="font-size: 16pt; font-weight: bold; margin-bottom: 12px;">Course/Subject: ${course}</div>
                 </div>
 
                 <!-- Table -->
