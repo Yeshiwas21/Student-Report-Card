@@ -137,42 +137,53 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 							if (i >= courses.length) return renderOverallGrades();
 
 							const [course, courseData] = courses[i];
-							w.document.write(`<div class="course-section"><h3>Course: ${course}</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Topic Name</th>
-                                        <th>Competency</th>
-                                        <th>Term 1</th>
-                                        <th>Term 2</th>
-                                        <th>Term 3</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`);
+							w.document.write(`<div class="course-section"><h3>Course: ${course}</h3>`);
 
-							// --- Corrected competency table with topic spanning multiple competencies ---
+							// --- Group topics for competency table ---
 							let topicGroups = {};
 							courseData.topics.forEach(c => {
 								if (!topicGroups[c.topic_name]) topicGroups[c.topic_name] = [];
 								topicGroups[c.topic_name].push(c);
 							});
 
-							for (const [topicName, competencies] of Object.entries(topicGroups)) {
-								competencies.forEach((c, idx) => {
-									w.document.write('<tr>');
+							// --- Only render table if there is at least one competency ---
+							const hasCompetency = Object.values(topicGroups).some(comps =>
+								comps.some(c => c.competency && c.competency.trim() !== "")
+							);
 
-									// Only show topic name once for all competencies
-									if (idx === 0) {
-										w.document.write(`<td rowspan="${competencies.length}">${topicName}</td>`);
-									}
+							if (hasCompetency) {
+								w.document.write(`
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Topic Name</th>
+                                            <th>Competency</th>
+                                            <th>Term 1</th>
+                                            <th>Term 2</th>
+                                            <th>Term 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            `);
 
-									w.document.write(`<td>${c.competency || ""}</td>`);
-									w.document.write(`<td>${c.term1 || ""}</td>`);
-									w.document.write(`<td>${c.term2 || ""}</td>`);
-									w.document.write(`<td>${c.term3 || ""}</td>`);
+								for (const [topicName, competencies] of Object.entries(topicGroups)) {
+									const validCompetencies = competencies.filter(c => c.competency && c.competency.trim() !== "");
+									if (validCompetencies.length === 0) continue;
 
-									w.document.write('</tr>');
-								});
+									validCompetencies.forEach((c, idx) => {
+										w.document.write('<tr>');
+										if (idx === 0) {
+											w.document.write(`<td rowspan="${validCompetencies.length}">${topicName}</td>`);
+										}
+										w.document.write(`<td>${c.competency}</td>`);
+										w.document.write(`<td>${c.term1 || ""}</td>`);
+										w.document.write(`<td>${c.term2 || ""}</td>`);
+										w.document.write(`<td>${c.term3 || ""}</td>`);
+										w.document.write('</tr>');
+									});
+								}
+
+								w.document.write(`</tbody></table>`);
 							}
 
 							// --- Course Summary ---
@@ -182,15 +193,13 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 								async: false,
 								callback: function (summary) {
 									const sr = summary.message || {};
-									w.document.write(`</tbody></table>`);
-
 									w.document.write(`
                                     <table style="margin-top:5px;">
                                         <tbody>
                                             <tr><td colspan="2"><b>COURSE SUMMARY</b></td><td><b>Term 1</b></td><td><b>Term 2</b></td><td><b>Term 3</b></td></tr>
                                             <tr><td>COURSEWORK</td><td>20%</td><td>${sr.coursework?.[0] || 0}</td><td>${sr.coursework?.[1] || 0}</td><td>${sr.coursework?.[2] || 0}</td></tr>
                                             <tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || 0}</td><td>${sr.unit_test?.[1] || 0}</td><td>${sr.unit_test?.[2] || 0}</td></tr>
-                                            <tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
+                                            <tr> <td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
                                             <tr><td>TRIMESTER TOTAL</td><td>100%</td><td>${sr.trimester_total?.[0] || 0}</td><td>${sr.trimester_total?.[1] || 0}</td><td>${sr.trimester_total?.[2] || 0}</td></tr>
                                             <tr><td>YEARLY TOTAL GRADE</td><td colspan="4">${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</td></tr>
                                         </tbody>
@@ -294,6 +303,7 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 			}
 		});
 	});
+
 
 
 };
