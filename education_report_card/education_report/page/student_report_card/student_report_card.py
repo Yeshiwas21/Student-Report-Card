@@ -292,3 +292,15 @@ def get_student_report_summary(academic_year, program, student=None, full=False)
         })
 
     return detailed_data
+
+@frappe.whitelist()
+def get_company_info():
+	company = frappe.db.get_single_value("Global Defaults", "default_company")
+	if not company:
+		return {"company_name": "Unknown Company", "company_logo": ""}
+
+	company_doc = frappe.get_doc("Company", company)
+	return {
+		"company_name": company_doc.company_name,
+		"company_logo": company_doc.company_logo
+	}

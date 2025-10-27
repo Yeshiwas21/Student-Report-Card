@@ -55,288 +55,300 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 			return;
 		}
 
-		let w = window.open('', '', 'height=900,width=1100');
-		w.document.write('<html><head><title>Student Report</title><style>');
-		w.document.write(`
-        body { font-family: 'Times New Roman', serif; margin: 25px; font-size: 12pt; color: #000; }
-        table { border-collapse: collapse; width: 100%; margin-bottom: 15px; font-size: 12pt; }
-        table, th, td { border: 1px solid black; }
-        th, td { padding: 6px; text-align: center; }
-        th { background-color: #f5f5f5; font-weight: bold; }
-        h1, h2, h3, h4 { text-align: center; margin: 10px 0; }
-        .course-section, .overall-summary, .comments-section,
-        .director-intro-fr, .director-intro-en,
-        .director-conclusion-fr, .director-conclusion-en {
-            margin-top: 20px; page-break-inside: avoid; padding: 10px;
-            border: 1px solid #000; border-radius: 6px;
-        }
-        .student-header { margin: 15px 0; font-size: 13pt; }
-        .student-header div { margin-bottom: 5px; }
-        .course-summary-table { margin-top: 10px; border: 1px solid #000; }
-        .course-summary-table th { background-color: #f0f0f0; }
-        .overall-row td { font-weight: bold; background-color: #fafafa; }
-        @media print {
-            body { margin: 0; }
-            table { page-break-inside: auto; }
-            tr { page-break-inside: avoid; page-break-after: auto; }
-        }
-    `);
-		w.document.write('</style></head><body>');
-
-		w.document.write(`<h1>${program} Report Card</h1>`);
-
-		// --- Director Intro ---
+		// --- Fetch company name and logo first ---
 		frappe.call({
-			method: "education_report_card.education_report.page.student_report_card.student_report_card.get_director_message",
-			args: { academic_year: academicYear, program: program },
-			callback: function (r) {
-				const directorMsg = r.message || {};
+			method: "education_report_card.education_report.page.student_report_card.student_report_card.get_company_info",
+			callback: function (res) {
+				const company = res.message || {};
+				const company_name = company.company_name || "Your Institution Name";
+				const company_logo = company.company_logo
+					? `<img src="${company.company_logo}" style="width:120px;height:auto;display:block;margin:0 auto 10px auto;">`
+					: "";
 
-				if (directorMsg.introduction_france) {
-					w.document.write(`
-					<div class="director-intro-fr">
-						<h2>Message de la Directrice de l’école</h2>
-						<p style="text-align: justify;">${directorMsg.introduction_france}</p>
-					</div>`);
-				}
-				if (directorMsg.introduction_english) {
-					w.document.write(`
-					<div class="director-intro-en">
-						<h2>Message from the School Director</h2>
-						<p style="text-align: justify;">${directorMsg.introduction_english}</p>
-						<div style="text-align:right; margin-top:20px;">
-							<span>__________________________</span><br>
-							<b>${directorMsg.director_name || ""}</b><br>
-							<span>Principal / Directeur</span>
-						</div>
-					</div>`);
-				}
-
-				// --- Student Info ---
+				let w = window.open('', '', 'height=900,width=1100');
+				w.document.write('<html><head><title>Student Report</title><style>');
 				w.document.write(`
-				<div class="student-header">
-					<div><b>Academic Year:</b> ${academicYear}</div>
-					<div><b>Program/Grade:</b> ${program}</div>
-					<div><b>Student:</b> ${student}${filter_controls.student.$input.val() ? ' (' + filter_controls.student.$input.val() + ')' : ''}</div>
-				</div>
+				body { font-family: 'Times New Roman', serif; margin: 25px; font-size: 12pt; color: #000; }
+				table { border-collapse: collapse; width: 100%; margin-bottom: 15px; font-size: 12pt; }
+				table, th, td { border: 1px solid black; }
+				th, td { padding: 6px; text-align: center; }
+				th { background-color: #f5f5f5; font-weight: bold; }
+				h1, h2, h3, h4 { text-align: center; margin: 10px 0; }
+				.course-section, .overall-summary, .comments-section,
+				.director-intro-fr, .director-intro-en,
+				.director-conclusion-fr, .director-conclusion-en {
+					margin-top: 20px; page-break-inside: avoid; padding: 10px;
+					border: 1px solid #000; border-radius: 6px;
+				}
+				.student-header { margin: 15px 0; font-size: 13pt; }
+				.student-header div { margin-bottom: 5px; }
+				.course-summary-table { margin-top: 10px; border: 1px solid #000; }
+				.course-summary-table th { background-color: #f0f0f0; }
+				.overall-row td { font-weight: bold; background-color: #fafafa; }
+				.header-section { text-align: center; margin-bottom: 20px; }
+				.company-name { font-size: 18pt; font-weight: bold; margin-bottom: 5px; }
+				@media print {
+					body { margin: 0; }
+					table { page-break-inside: auto; }
+					tr { page-break-inside: avoid; page-break-after: auto; }
+				}
 			`);
+				w.document.write('</style></head><body>');
 
-				// --- Fetch Student Reports ---
+				// --- Add first page cover ---
+				w.document.write(`
+					<div style="page-break-after: always; height: 100vh; display: flex; flex-direction: column;">
+						<!-- Logo and Company Name at the top -->
+						<div style="text-align: center; margin-top: 20px;">
+							${company_logo}
+							<div class="company-name">${company_name}</div>
+						</div>
+
+						<!-- Centered Academic Year and Grade Name Report Card -->
+						<div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+							<h2>Academic Year: ${academicYear}</h2>
+							<h1>${program} Report Card</h1>
+						</div>
+					</div>
+					`);
+
+				// --- Director Intro ---
 				frappe.call({
-					method: "education_report_card.education_report.page.student_report_card.student_report_card.get_student_reports",
-					args: { filters: { academic_year: academicYear, program: program, student: student } },
-					callback: function (r2) {
-						const data = r2.message || [];
-						const grouped = {};
+					method: "education_report_card.education_report.page.student_report_card.student_report_card.get_director_message",
+					args: { academic_year: academicYear, program: program },
+					callback: function (r) {
+						const directorMsg = r.message || {};
 
-						data.forEach(row => {
-							const course = row.course || "Unknown Course";
-							if (!grouped[course]) grouped[course] = { topics: [] };
-							grouped[course].topics.push({
-								topic_name: row.topic_name,
-								competency: row.competency,
-								term1: row.term1,
-								term2: row.term2,
-								term3: row.term3
-							});
-						});
+						if (directorMsg.introduction_france) {
+							w.document.write(`
+						<div class="director-intro-fr">
+							<h2>Message de la Directrice de l’école</h2>
+							<p style="text-align: justify;">${directorMsg.introduction_france}</p>
+						</div>`);
+						}
+						if (directorMsg.introduction_english) {
+							w.document.write(`
+						<div class="director-intro-en">
+							<h2>Message from the School Director</h2>
+							<p style="text-align: justify;">${directorMsg.introduction_english}</p>
+							<div style="text-align:right; margin-top:20px;">
+								<span>__________________________</span><br>
+								<b>${directorMsg.director_name || ""}</b><br>
+								<span>Principal / Directeur</span>
+							</div>
+						</div>`);
+						}
 
-						const courses = Object.entries(grouped);
+						// --- Student Info ---
+						w.document.write(`
+					<div class="student-header">
+						<div><b>Academic Year:</b> ${academicYear}</div>
+						<div><b>Program/Grade:</b> ${program}</div>
+						<div><b>Student:</b> ${student}${filter_controls.student.$input.val() ? ' (' + filter_controls.student.$input.val() + ')' : ''}</div>
+					</div>
+				`);
 
-						(function renderCourse(i) {
-							if (i >= courses.length) return renderOverallGrades();
+						// --- Fetch Student Reports ---
+						frappe.call({
+							method: "education_report_card.education_report.page.student_report_card.student_report_card.get_student_reports",
+							args: { filters: { academic_year: academicYear, program: program, student: student } },
+							callback: function (r2) {
+								const data = r2.message || [];
+								const grouped = {};
 
-							const [course, courseData] = courses[i];
+								data.forEach(row => {
+									const course = row.course || "Unknown Course";
+									if (!grouped[course]) grouped[course] = { topics: [] };
+									grouped[course].topics.push({
+										topic_name: row.topic_name,
+										competency: row.competency,
+										term1: row.term1,
+										term2: row.term2,
+										term3: row.term3
+									});
+								});
 
-							// --- Group topics ---
-							let topicGroups = {};
-							courseData.topics.forEach(c => {
-								if (!topicGroups[c.topic_name]) topicGroups[c.topic_name] = [];
-								topicGroups[c.topic_name].push(c);
-							});
+								const courses = Object.entries(grouped);
 
-							const hasCompetency = Object.values(topicGroups).some(comps =>
-								comps.some(c => c.competency && c.competency.trim() !== "")
-							);
+								(function renderCourse(i) {
+									if (i >= courses.length) return renderOverallGrades();
 
-							// --- Fetch Course Summary to decide rendering ---
-							frappe.call({
-								method: "education_report_card.education_report.page.student_report_card.student_report_card.get_course_summary",
-								args: { student, course, program, academic_year: academicYear },
-								async: false,
-								callback: function (summary) {
-									const sr = summary.message || {};
+									const [course, courseData] = courses[i];
 
-									const allValues = [
-										...(sr.coursework || []),
-										...(sr.unit_test || []),
-										...(sr.exam || []),
-										...(sr.trimester_total || [])
-									].map(Number);
+									let topicGroups = {};
+									courseData.topics.forEach(c => {
+										if (!topicGroups[c.topic_name]) topicGroups[c.topic_name] = [];
+										topicGroups[c.topic_name].push(c);
+									});
 
-									const hasNonZero = allValues.some(v => v !== 0 && !isNaN(v));
+									const hasCompetency = Object.values(topicGroups).some(comps =>
+										comps.some(c => c.competency && c.competency.trim() !== "")
+									);
 
-									// If no competencies AND all averages are zero → skip entirely
-									if (!hasCompetency && !hasNonZero) {
-										renderCourse(i + 1);
-										return;
-									}
-
-									// --- Render Course ---
-									w.document.write(`<div class="course-section"><h3>Course/Subject: ${course}</h3>`);
-
-									if (hasCompetency) {
-										w.document.write(`
-									<table>
-										<thead>
-											<tr>
-												<th>Topic Name</th>
-												<th>Competency</th>
-												<th>Term 1</th>
-												<th>Term 2</th>
-												<th>Term 3</th>
-											</tr>
-										</thead>
-										<tbody>`);
-
-										for (const [topicName, competencies] of Object.entries(topicGroups)) {
-											const valid = competencies.filter(c => c.competency && c.competency.trim() !== "");
-											if (valid.length === 0) continue;
-
-											valid.forEach((c, idx) => {
-												w.document.write('<tr>');
-												if (idx === 0) w.document.write(`<td rowspan="${valid.length}">${topicName}</td>`);
-												w.document.write(`<td>${c.competency}</td>`);
-												w.document.write(`<td>${c.term1 || ""}</td>`);
-												w.document.write(`<td>${c.term2 || ""}</td>`);
-												w.document.write(`<td>${c.term3 || ""}</td>`);
-												w.document.write('</tr>');
-											});
-										}
-										w.document.write(`</tbody></table>`);
-									}
-
-									if (hasNonZero) {
-										w.document.write(`
-									<table class="course-summary-table">
-										<thead>
-											<tr>
-												<th colspan="2">COURSE SUMMARY</th>
-												<th>Term 1</th><th>Term 2</th><th>Term 3</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr><td>COURSEWORK</td><td>20%</td><td>${sr.coursework?.[0] || 0}</td><td>${sr.coursework?.[1] || 0}</td><td>${sr.coursework?.[2] || 0}</td></tr>
-											<tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || 0}</td><td>${sr.unit_test?.[1] || 0}</td><td>${sr.unit_test?.[2] || 0}</td></tr>
-											<tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
-											<tr><td><b>TRIMESTER TOTAL</b></td><td><b>100%</b></td><td><b>${sr.trimester_total?.[0] || 0}</b></td><td><b>${sr.trimester_total?.[1] || 0}</b></td><td><b>${sr.trimester_total?.[2] || 0}</b></td></tr>
-											<tr><td colspan="2"><b>YEARLY TOTAL GRADE</b></td><td colspan="3"><b>${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</b></td></tr>
-										</tbody>
-									</table>`);
-									}
-
-									w.document.write(`</div>`);
-									renderCourse(i + 1);
-								}
-							});
-						})(0);
-
-						function renderOverallGrades() {
-							frappe.call({
-								method: "education_report_card.education_report.page.student_report_card.student_report_card.get_overall_term_averages",
-								args: { student, program, academic_year: academicYear },
-								callback: function (res3) {
-									const o = res3.message || {};
-									const yearlyAvg =
-										o.yearly_avg || ((o.term1_avg || 0) + (o.term2_avg || 0) + (o.term3_avg || 0)) / 3;
-
-									const hasNonZero =
-										(o.term1_avg || 0) !== 0 ||
-										(o.term2_avg || 0) !== 0 ||
-										(o.term3_avg || 0) !== 0 ||
-										yearlyAvg !== 0;
-
-									if (hasNonZero) {
-										w.document.write(`
-									<div class="overall-summary">
-										<table>
-											<thead>
-												<tr><th>OVERALL GRADES</th><th>Term 1</th><th>Term 2</th><th>Term 3</th></tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>TRIMESTER AVERAGE / Moyenne trimestrielle</td>
-													<td>${o.term1_avg || 0}%</td>
-													<td>${o.term2_avg || 0}%</td>
-													<td>${o.term3_avg || 0}%</td>
-												</tr>
-												<tr>
-													<td><b>Yearly Average / Moyenne de l’année</b></td>
-													<td colspan="3"><b>${yearlyAvg.toFixed(2)}%</b></td>
-												</tr>
-											</tbody>
-										</table>
-									</div>`);
-									}
-
-									// --- Comments ---
 									frappe.call({
-										method: "education_report_card.education_report.page.student_report_card.student_report_card.get_term_and_director_comments",
+										method: "education_report_card.education_report.page.student_report_card.student_report_card.get_course_summary",
+										args: { student, course, program, academic_year: academicYear },
+										async: false,
+										callback: function (summary) {
+											const sr = summary.message || {};
+											const allValues = [
+												...(sr.coursework || []),
+												...(sr.unit_test || []),
+												...(sr.exam || []),
+												...(sr.trimester_total || [])
+											].map(Number);
+											const hasNonZero = allValues.some(v => v !== 0 && !isNaN(v));
+
+											if (!hasCompetency && !hasNonZero) {
+												renderCourse(i + 1);
+												return;
+											}
+
+											w.document.write(`<div class="course-section"><h3>Course/Subject: ${course}</h3>`);
+
+											if (hasCompetency) {
+												w.document.write(`
+											<table>
+												<thead>
+													<tr><th>Topic Name</th><th>Competency</th><th>Term 1</th><th>Term 2</th><th>Term 3</th></tr>
+												</thead><tbody>`);
+
+												for (const [topicName, competencies] of Object.entries(topicGroups)) {
+													const valid = competencies.filter(c => c.competency && c.competency.trim() !== "");
+													if (valid.length === 0) continue;
+
+													valid.forEach((c, idx) => {
+														w.document.write('<tr>');
+														if (idx === 0) w.document.write(`<td rowspan="${valid.length}">${topicName}</td>`);
+														w.document.write(`<td>${c.competency}</td>`);
+														w.document.write(`<td>${c.term1 || ""}</td>`);
+														w.document.write(`<td>${c.term2 || ""}</td>`);
+														w.document.write(`<td>${c.term3 || ""}</td>`);
+														w.document.write('</tr>');
+													});
+												}
+												w.document.write(`</tbody></table>`);
+											}
+
+											if (hasNonZero) {
+												w.document.write(`
+											<table class="course-summary-table">
+												<thead><tr><th colspan="2">COURSE SUMMARY</th><th>Term 1</th><th>Term 2</th><th>Term 3</th></tr></thead>
+												<tbody>
+													<tr><td>COURSEWORK</td><td>20%</td><td>${sr.coursework?.[0] || 0}</td><td>${sr.coursework?.[1] || 0}</td><td>${sr.coursework?.[2] || 0}</td></tr>
+													<tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || 0}</td><td>${sr.unit_test?.[1] || 0}</td><td>${sr.unit_test?.[2] || 0}</td></tr>
+													<tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
+													<tr><td><b>TRIMESTER TOTAL</b></td><td><b>100%</b></td><td><b>${sr.trimester_total?.[0] || 0}</b></td><td><b>${sr.trimester_total?.[1] || 0}</b></td><td><b>${sr.trimester_total?.[2] || 0}</b></td></tr>
+													<tr><td colspan="2"><b>YEARLY TOTAL GRADE</b></td><td colspan="3"><b>${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</b></td></tr>
+												</tbody>
+											</table>`);
+											}
+
+											w.document.write(`</div>`);
+											renderCourse(i + 1);
+										}
+									});
+								})(0);
+
+								function renderOverallGrades() {
+									frappe.call({
+										method: "education_report_card.education_report.page.student_report_card.student_report_card.get_overall_term_averages",
 										args: { student, program, academic_year: academicYear },
-										callback: function (r4) {
-											const t = r4.message?.teacher || {};
-											const d = r4.message?.director || {};
+										callback: function (res3) {
+											const o = res3.message || {};
+											const yearlyAvg =
+												o.yearly_avg || ((o.term1_avg || 0) + (o.term2_avg || 0) + (o.term3_avg || 0)) / 3;
 
-											w.document.write(`
-										<div class="comments-section">
-											<h4><b>Homeroom Teacher’s Comment / Commentaires du Titulaire :</b></h4>
-											<p>
-												T1: ${t.term1 || "................................"}<br>
-												T2: ${t.term2 || "................................"}<br>
-												T3: ${t.term3 || "................................"}<br><br>
-												<b>Name:</b> ${t.teacher_name || ".........................."} &nbsp;&nbsp;
-												<b>(Sign)</b> ..........................
-											</p>
-											<hr>
-											<h4><b>Principal’s Note / Remarque du Directeur :</b></h4>
-											<p>
-												T1: ${d.term1 || "................................"}<br>
-												T2: ${d.term2 || "................................"}<br>
-												T3: ${d.term3 || "................................"}<br><br>
-												<b>Name:</b> ${d.director_name || ".........................."} &nbsp;&nbsp;
-												<b>(Sign)</b> ..........................
-											</p>
-										</div>`);
+											const hasNonZero =
+												(o.term1_avg || 0) !== 0 ||
+												(o.term2_avg || 0) !== 0 ||
+												(o.term3_avg || 0) !== 0 ||
+												yearlyAvg !== 0;
 
-											if (directorMsg.conclusion_fr) {
-												w.document.write(`<div class="director-conclusion-fr">
-												<h3> ${directorMsg.conc_title_fr || 'Décision finale'}</h3>
-												<p style="text-align:justify;">${directorMsg.conclusion_fr}</p>
-											</div>`);
-											}
-											if (directorMsg.conclusion_en) {
-												w.document.write(`<div class="director-conclusion-en">
-												<h3>${directorMsg.conc_title_en || 'Final decision'}</h3>
-												<p style="text-align:justify;">${directorMsg.conclusion_en}</p>
+											if (hasNonZero) {
+												w.document.write(`
+											<div class="overall-summary">
+												<table>
+													<thead>
+														<tr><th>OVERALL GRADES</th><th>Term 1</th><th>Term 2</th><th>Term 3</th></tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>TRIMESTER AVERAGE / Moyenne trimestrielle</td>
+															<td>${o.term1_avg || 0}%</td>
+															<td>${o.term2_avg || 0}%</td>
+															<td>${o.term3_avg || 0}%</td>
+														</tr>
+														<tr>
+															<td><b>Yearly Average / Moyenne de l’année</b></td>
+															<td colspan="3"><b>${yearlyAvg.toFixed(2)}%</b></td>
+														</tr>
+													</tbody>
+												</table>
 											</div>`);
 											}
 
-											w.document.write('</body></html>');
-											w.document.close();
-											setTimeout(() => {
-												w.print();
-												w.onafterprint = () => w.close();
-											}, 600);
+											// --- Comments ---
+											frappe.call({
+												method: "education_report_card.education_report.page.student_report_card.student_report_card.get_term_and_director_comments",
+												args: { student, program, academic_year: academicYear },
+												callback: function (r4) {
+													const t = r4.message?.teacher || {};
+													const d = r4.message?.director || {};
+
+													w.document.write(`
+												<div class="comments-section">
+													<h4><b>Homeroom Teacher’s Comment / Commentaires du Titulaire :</b></h4>
+													<p>
+														T1: ${t.term1 || "................................"}<br>
+														T2: ${t.term2 || "................................"}<br>
+														T3: ${t.term3 || "................................"}<br><br>
+														<b>Name:</b> ${t.teacher_name || ".........................."} &nbsp;&nbsp;
+														<b>(Sign)</b> ..........................
+													</p>
+													<hr>
+													<h4><b>Principal’s Note / Remarque du Directeur :</b></h4>
+													<p>
+														T1: ${d.term1 || "................................"}<br>
+														T2: ${d.term2 || "................................"}<br>
+														T3: ${d.term3 || "................................"}<br><br>
+														<b>Name:</b> ${d.director_name || ".........................."} &nbsp;&nbsp;
+														<b>(Sign)</b> ..........................
+													</p>
+												</div>`);
+
+													if (directorMsg.conclusion_fr) {
+														w.document.write(`<div class="director-conclusion-fr">
+														<h3>${directorMsg.conc_title_fr || 'Décision finale'}</h3>
+														<p style="text-align:justify;">${directorMsg.conclusion_fr}</p>
+													</div>`);
+													}
+													if (directorMsg.conclusion_en) {
+														w.document.write(`<div class="director-conclusion-en">
+														<h3>${directorMsg.conc_title_en || 'Final decision'}</h3>
+														<p style="text-align:justify;">${directorMsg.conclusion_en}</p>
+													</div>`);
+													}
+
+													w.document.write('</body></html>');
+													w.document.close();
+													setTimeout(() => {
+														w.print();
+														w.onafterprint = () => w.close();
+													}, 600);
+												}
+											});
 										}
 									});
 								}
-							});
-						}
+							}
+						});
 					}
 				});
 			}
 		});
 	});
+
 
 };
 
