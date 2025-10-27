@@ -310,13 +310,13 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 
 											if (directorMsg.conclusion_fr) {
 												w.document.write(`<div class="director-conclusion-fr">
-												<h3>Décision finale</h3>
+												<h3> ${directorMsg.conc_title_fr || 'Décision finale'}</h3>
 												<p style="text-align:justify;">${directorMsg.conclusion_fr}</p>
 											</div>`);
 											}
 											if (directorMsg.conclusion_en) {
 												w.document.write(`<div class="director-conclusion-en">
-												<h3>Final decision</h3>
+												<h3>${directorMsg.conc_title_en || 'Final decision'}</h3>
 												<p style="text-align:justify;">${directorMsg.conclusion_en}</p>
 											</div>`);
 											}

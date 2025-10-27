@@ -21,7 +21,9 @@
   "term2_comment",
   "term3_comment",
   "cnnclusion_section",
+  "conc_title_fr",
   "conclusion_fr",
+  "conc_title_en",
   "conclusion_en"
  ],
  "fields": [
@@ -96,7 +98,7 @@
   {
    "fieldname": "introduction_france",
    "fieldtype": "Long Text",
-   "label": "Introduction in France"
+   "label": "Introduction en France"
   },
   {
    "fieldname": "introduction_english",
@@ -124,12 +126,22 @@
    "label": "Program/Grade",
    "options": "Program",
    "reqd": 1
+  },
+  {
+   "fieldname": "conc_title_en",
+   "fieldtype": "Data",
+   "label": "Conclusion Title"
+  },
+  {
+   "fieldname": "conc_title_fr",
+   "fieldtype": "Data",
+   "label": "Titre de la conclusion"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-24 08:11:14.510939",
+ "modified": "2025-10-26 13:11:29.397495",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Director Message",

@@ -179,7 +179,7 @@ def get_director_message(academic_year, program):
     director_message = frappe.db.get_value(
         "Director Message",
         {"academic_year": academic_year, "program": program},
-        ["director_name", "introduction_france", "introduction_english", "conclusion_fr", "conclusion_en", "company"],
+        ["director_name", "introduction_france", "introduction_english", "conclusion_fr", "conc_title_fr", "conc_title_en", "conclusion_en", "company"],
         as_dict=True
     )
     return director_message or {}
