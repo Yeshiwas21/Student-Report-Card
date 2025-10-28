@@ -1224,9 +1224,9 @@
     "hidden": 0,
     "icon": null,
     "is_query_report": 0,
-    "label": "Student Report Summary",
+    "label": "Student Report Card",
     "link_count": 0,
-    "link_to": "student-report-summary",
+    "link_to": "student-report-card",
     "link_type": "Page",
     "onboard": 0,
     "only_for": null,
@@ -1237,7 +1237,7 @@
     "type": "Link"
    }
   ],
-  "modified": "2025-10-20 08:41:27.480876",
+  "modified": "2025-10-24 18:02:13.923207",
   "module": "Education",
   "name": "Education",
   "number_cards": [],
