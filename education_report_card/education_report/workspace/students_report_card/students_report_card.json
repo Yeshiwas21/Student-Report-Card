@@ -84,7 +84,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "student-report-card",
+   "label": "Student Report Card",
    "link_count": 0,
    "link_to": "student-report-card",
    "link_type": "Page",
@@ -92,7 +92,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-10-29 11:52:54.454486",
+ "modified": "2025-10-29 11:54:29.010184",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Students Report Card",
