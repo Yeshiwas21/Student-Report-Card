@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "naming_series:",
  "creation": "2025-09-22 11:47:11.265237",
@@ -127,7 +128,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-24 08:08:27.906582",
+ "modified": "2025-10-29 11:49:54.182685",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Test Result",

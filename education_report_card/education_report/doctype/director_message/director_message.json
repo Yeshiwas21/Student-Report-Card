@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "naming_series:",
  "creation": "2025-10-18 13:08:37.528980",
@@ -141,7 +142,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-26 13:11:29.397495",
+ "modified": "2025-10-29 11:49:34.531912",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Director Message",
