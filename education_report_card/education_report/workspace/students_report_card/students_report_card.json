@@ -1,0 +1,125 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"teNAHMcVR-\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Students Report Card</span>\",\"col\":12}},{\"id\":\"625IUDkgN3\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"xGfJ3bWaik\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Test Result\",\"col\":3}},{\"id\":\"RscxgicVrZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Report\",\"col\":3}},{\"id\":\"Eu26se_Jbe\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"x0pKXVB50L\",\"type\":\"card\",\"data\":{\"card_name\":\"Messages and Comments\",\"col\":4}},{\"id\":\"665BNCpHoz\",\"type\":\"card\",\"data\":{\"card_name\":\"Student Performance\",\"col\":4}}]",
+ "creation": "2025-10-29 11:41:12.675246",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "milestone",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Students Report Card",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Messages and Comments",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Director Message",
+   "link_count": 0,
+   "link_to": "Director Message",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Term Comment",
+   "link_count": 0,
+   "link_to": "Term Comment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Student Performance",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Competency",
+   "link_count": 0,
+   "link_to": "Competency",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Test Result",
+   "link_count": 0,
+   "link_to": "Test Result",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Student Report",
+   "link_count": 0,
+   "link_to": "Student Report",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "student-report-card",
+   "link_count": 0,
+   "link_to": "student-report-card",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2025-10-29 11:52:54.454486",
+ "modified_by": "Administrator",
+ "module": "Education Report",
+ "name": "Students Report Card",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 50.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Test Result",
+   "link_to": "Test Result",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Student Report",
+   "link_to": "Student Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Students Report Card"
+}
