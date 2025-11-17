@@ -8,6 +8,7 @@
   "naming_series",
   "report_date",
   "teacher",
+  "instructor_name",
   "student",
   "student_name",
   "get_topics_and_comptencies",
@@ -391,10 +392,17 @@
    "label": "Grading Scale",
    "options": "Grading Scale",
    "reqd": 1
+  },
+  {
+   "fetch_from": "teacher.instructor_name",
+   "fieldname": "instructor_name",
+   "fieldtype": "Data",
+   "label": "Instructor Name",
+   "read_only": 1
   }
  ],
  "links": [],
- "modified": "2025-10-25 14:59:40.121500",
+ "modified": "2025-11-17 15:24:25.076115",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",

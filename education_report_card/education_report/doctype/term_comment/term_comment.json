@@ -14,6 +14,7 @@
   "column_break_vmqd",
   "program",
   "student",
+  "student_name",
   "section_break_krwp",
   "term1_comment",
   "term2_comment",
@@ -96,12 +97,19 @@
    "fieldname": "term3_comment",
    "fieldtype": "Long Text",
    "label": "Term 3 Comment"
+  },
+  {
+   "fetch_from": "student.student_name",
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "label": "Student Name",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-29 11:50:23.903370",
+ "modified": "2025-11-17 15:26:21.075206",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Term Comment",
