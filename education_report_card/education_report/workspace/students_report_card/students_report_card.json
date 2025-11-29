@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"teNAHMcVR-\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Students Report Card</span>\",\"col\":12}},{\"id\":\"625IUDkgN3\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"xGfJ3bWaik\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Test Result\",\"col\":3}},{\"id\":\"RscxgicVrZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Report\",\"col\":3}},{\"id\":\"Eu26se_Jbe\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"x0pKXVB50L\",\"type\":\"card\",\"data\":{\"card_name\":\"Messages and Comments\",\"col\":4}},{\"id\":\"665BNCpHoz\",\"type\":\"card\",\"data\":{\"card_name\":\"Student Performance\",\"col\":4}}]",
+ "content": "[{\"id\":\"teNAHMcVR-\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Students Report Card</span>\",\"col\":12}},{\"id\":\"625IUDkgN3\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"xGfJ3bWaik\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Test Result\",\"col\":3}},{\"id\":\"RscxgicVrZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Report\",\"col\":3}},{\"id\":\"Eu26se_Jbe\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"x0pKXVB50L\",\"type\":\"card\",\"data\":{\"card_name\":\"Messages and Comments\",\"col\":4}},{\"id\":\"665BNCpHoz\",\"type\":\"card\",\"data\":{\"card_name\":\"Student Performance\",\"col\":4}},{\"id\":\"Yae1XAVMLZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
  "creation": "2025-10-29 11:41:12.675246",
  "custom_blocks": [],
  "docstatus": 0,
@@ -46,7 +46,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Student Performance",
-   "link_count": 4,
+   "link_count": 3,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -84,15 +84,44 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Student Report Card",
    "link_count": 0,
    "link_to": "student-report-card",
    "link_type": "Page",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Class Test Overview",
+   "link_count": 0,
+   "link_to": "Class Test Overview",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Class Marksheet",
+   "link_count": 0,
+   "link_to": "Class Marksheet",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2025-10-29 11:54:29.010184",
+ "modified": "2025-11-28 22:31:12.123429",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Students Report Card",

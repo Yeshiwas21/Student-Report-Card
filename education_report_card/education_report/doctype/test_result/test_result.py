@@ -20,6 +20,13 @@ class TestResult(Document):
 		"""
 		self.update_student_reports()
 
+	def on_update_after_submit(self):
+		"""
+		Called whenever a submitted document is updated.
+		Useful for recalculations or syncing with related records.
+		"""
+		self.update_student_reports()
+
 	def on_cancel(self):
 		"""
 		Called when the document is cancelled.
