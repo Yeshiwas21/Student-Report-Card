@@ -85,7 +85,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Reports",
-   "link_count": 3,
+   "link_count": 2,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -109,19 +109,9 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Class Marksheet",
-   "link_count": 0,
-   "link_to": "Class Marksheet",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
   }
  ],
- "modified": "2025-11-28 22:31:12.123429",
+ "modified": "2025-11-29 07:44:50.353577",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Students Report Card",
