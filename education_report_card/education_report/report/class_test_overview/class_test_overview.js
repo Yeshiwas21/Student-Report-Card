@@ -1,6 +1,3 @@
-// Copyright (c) 2025, Yeshiwas D. and contributors
-// For license information, please see license.txt
-
 frappe.query_reports["Class Test Overview"] = {
 	"filters": [
 		{
@@ -8,6 +5,7 @@ frappe.query_reports["Class Test Overview"] = {
 			label: "Academic Year",
 			fieldtype: "Link",
 			options: "Academic Year",
+			reqd: 1
 		},
 		{
 			fieldname: "program",
@@ -15,7 +13,6 @@ frappe.query_reports["Class Test Overview"] = {
 			fieldtype: "Link",
 			options: "Program",
 		},
-
 		{
 			fieldname: "term",
 			label: "Term",
@@ -45,7 +42,6 @@ frappe.query_reports["Class Test Overview"] = {
 			label: "Instructor",
 			fieldtype: "Link",
 			options: "Instructor",
-			// default: frappe.session.user_fullname
 		}
 	]
 };
