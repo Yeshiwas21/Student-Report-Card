@@ -101,7 +101,10 @@ class StudentReport(Document):
             self.unit_test_term3_30_percent +
             self.exam_term3_50_percent
         )
-        self.yearly_average_mark = (self.term1_total + self.term2_total + self.term3_total) / 3
+        terms = [self.term1_total, self.term2_total, self.term3_total]
+        positive_terms = [t for t in terms if t > 0]
+        self.yearly_average_mark = round(sum(positive_terms) / len(positive_terms), 1) if positive_terms else 0.0
+
         self.yearly_total_grade = self.get_grade(self.yearly_average_mark)
 
     def get_grade(grading_scale_name, mark):

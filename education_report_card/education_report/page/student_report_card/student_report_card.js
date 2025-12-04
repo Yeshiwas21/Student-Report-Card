@@ -235,11 +235,11 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 											<table class="course-summary-table">
 												<thead><tr><th colspan="2">COURSE SUMMARY</th><th>Term 1</th><th>Term 2</th><th>Term 3</th></tr></thead>
 												<tbody>
-													<tr><td>COURSEWORK</td><td>20%</td><td>${sr.coursework?.[0] || 0}</td><td>${sr.coursework?.[1] || 0}</td><td>${sr.coursework?.[2] || 0}</td></tr>
-													<tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || 0}</td><td>${sr.unit_test?.[1] || 0}</td><td>${sr.unit_test?.[2] || 0}</td></tr>
-													<tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || 0}</td><td>${sr.exam?.[1] || 0}</td><td>${sr.exam?.[2] || 0}</td></tr>
-													<tr><td><b>TRIMESTER TOTAL</b></td><td><b>100%</b></td><td><b>${sr.trimester_total?.[0] || 0}</b></td><td><b>${sr.trimester_total?.[1] || 0}</b></td><td><b>${sr.trimester_total?.[2] || 0}</b></td></tr>
-													<tr><td colspan="2"><b>YEARLY TOTAL GRADE</b></td><td colspan="3"><b>${sr.yearly_average_mark || 0} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</b></td></tr>
+													<tr><td>COURSEWORK</td><td>20%</td><td>${sr.coursework?.[0] || "-"}</td><td>${sr.coursework?.[1] || "-"}</td><td>${sr.coursework?.[2] || "-"}</td></tr>
+													<tr><td>UNIT TEST</td><td>30%</td><td>${sr.unit_test?.[0] || "-"}</td><td>${sr.unit_test?.[1] || "-"}</td><td>${sr.unit_test?.[2] || "-"}</td></tr>
+													<tr><td>END OF TERM EXAM</td><td>50%</td><td>${sr.exam?.[0] || "-"}</td><td>${sr.exam?.[1] || "-"}</td><td>${sr.exam?.[2] || "-"}</td></tr>
+													<tr><td><b>TRIMESTER TOTAL</b></td><td><b>100%</b></td><td><b>${sr.trimester_total?.[0] || "-"}</b></td><td><b>${sr.trimester_total?.[1] || "-"}</b></td><td><b>${sr.trimester_total?.[2] || "-"}</b></td></tr>
+													<tr><td colspan="2"><b>YEARLY TOTAL GRADE</b></td><td colspan="3"><b>${sr.yearly_average_mark || "-"} ${sr.yearly_total_grade ? '(' + sr.yearly_total_grade + ')' : ''}</b></td></tr>
 												</tbody>
 											</table>`);
 											}
@@ -256,9 +256,17 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 										args: { student, program, academic_year: academicYear },
 										callback: function (res3) {
 											const o = res3.message || {};
-											const yearlyAvg =
-												o.yearly_avg || ((o.term1_avg || 0) + (o.term2_avg || 0) + (o.term3_avg || 0)) / 3;
 
+											// Collect the term averages in an array
+											const terms = [o.term1_avg, o.term2_avg, o.term3_avg];
+
+											// Filter out null, undefined, or 0 values
+											const nonZeroTerms = terms.filter(t => t > 0);
+
+											// Calculate yearly average only if there are non-zero terms
+											const yearlyAvg = nonZeroTerms.length > 0
+												? nonZeroTerms.reduce((sum, t) => sum + t, 0) / nonZeroTerms.length
+												: 0;
 											const hasNonZero =
 												(o.term1_avg || 0) !== 0 ||
 												(o.term2_avg || 0) !== 0 ||
@@ -275,13 +283,13 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 													<tbody>
 														<tr>
 															<td>TRIMESTER AVERAGE / Moyenne trimestrielle</td>
-															<td>${o.term1_avg || 0}%</td>
-															<td>${o.term2_avg || 0}%</td>
-															<td>${o.term3_avg || 0}%</td>
+															<td>${o.term1_avg > 0 ? o.term1_avg.toFixed(1) + '%' : '-'}</td>
+															<td>${o.term2_avg > 0 ? o.term2_avg.toFixed(1) + '%' : '-'}</td>
+															<td>${o.term3_avg > 0 ? o.term3_avg.toFixed(1) + '%' : '-'}</td>
 														</tr>
 														<tr>
 															<td><b>Yearly Average / Moyenne de l’année</b></td>
-															<td colspan="3"><b>${yearlyAvg.toFixed(2)}%</b></td>
+															<td colspan="3"><b>${yearlyAvg.toFixed(1)}%</b></td>
 														</tr>
 													</tbody>
 												</table>

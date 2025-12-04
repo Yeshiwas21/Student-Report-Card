@@ -262,6 +262,7 @@
    "fieldname": "yearly_average_mark",
    "fieldtype": "Float",
    "label": "Yearly Average Mark",
+   "precision": "1",
    "read_only": 1
   },
   {
@@ -402,7 +403,7 @@
   }
  ],
  "links": [],
- "modified": "2025-11-17 15:24:25.076115",
+ "modified": "2025-12-04 17:00:21.450585",
  "modified_by": "Administrator",
  "module": "Education Report",
  "name": "Student Report",
