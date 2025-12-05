@@ -82,6 +82,14 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 				}
 				.student-header { margin: 15px 0; font-size: 13pt; }
 				.student-header div { margin-bottom: 5px; }
+				.id-tr td {
+					background-color: #d0ebd9ff !important;  /* light green */
+					color: black;
+				}
+				.program-tr td {
+					background-color: #c19dedff !important;  /* light green */
+					color: black;
+				}
 				.course-summary-table { margin-top: 10px; border: 1px solid #000; }
 				.course-summary-table th { background-color: #f0f0f0; }
 				.overall-row td { font-weight: bold; background-color: #fafafa; }
@@ -141,12 +149,23 @@ frappe.pages['student-report-card'].on_page_load = function (wrapper) {
 
 						// --- Student Info ---
 						w.document.write(`
-					<div class="student-header">
-						<div><b>Academic Year:</b> ${academicYear}</div>
-						<div><b>Program/Grade:</b> ${program}</div>
-						<div><b>Student:</b> ${student}${filter_controls.student.$input.val() ? ' (' + filter_controls.student.$input.val() + ')' : ''}</div>
-					</div>
-				`);
+							<div class="student-header">
+								<table class="student-header-table" style="width: 550px; border-collapse: collapse; margin-bottom: 10px; font-size: 24px;">
+									<tr class="id-tr">
+										<td style="width: 150px; font-weight: bold; padding: 4px; text-align: left;">Student ID</td>
+										<td style="padding: 4px; width: 400px; text-align: left;">${student || '-'}</td>
+									</tr>
+									<tr class="name-tr">
+										<td style="font-weight: bold; padding: 4px;text-align: left;">Student Name</td>
+										<td style="padding: 4px;text-align: left;"> ${filter_controls.student.$input.val() || '-'}</td>
+									</tr>
+									<tr  class="program-tr">
+										<td style="font-weight: bold; padding: 4px;text-align: left;">Program/Grade</td>
+										<td style="padding: 4px;text-align: left;">${program || '-'}</td>
+									</tr>
+								</table>
+							</div>
+						`);
 
 						// --- Fetch Student Reports ---
 						frappe.call({
