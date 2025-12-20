@@ -1,4 +1,4 @@
-# Copyright (c) 2025, Yeshiwas D. and contributors
+# Copyright (c) 2025, Michel B. and contributors
 # For license information, please see license.txt
 
 import frappe
@@ -8,12 +8,18 @@ from frappe.model.document import Document
 class DirectorMessage(Document):
 	def validate(self):
 		self.validate_duplicated_entry()
+
 	def validate_duplicated_entry(self):
-		exiting_comments = frappe.get_all(
+		# Only 1 message per Academic Year + Program/Grade
+		if frappe.db.exists(
 			"Director Message",
-			filters={"name":["!=", self.name], "academic_year": self.academic_year},
-			fields={"name"}
+			{
+				"name": ["!=", self.name],
+				"academic_year": self.academic_year,
+				"program": self.program,
+			},
+		):
+			frappe.throw(
+				f"Director Message already exists for Academic Year '<b>{self.academic_year}</b>' "
+				f"and Program/Grade '<b>{self.program}</b>'."
 			)
-		for tc in exiting_comments:
-			if len(tc) > 0:
-				frappe.throw(f"Director Message already existed for academic year:'<b>{self.academic_year} </b>'")
