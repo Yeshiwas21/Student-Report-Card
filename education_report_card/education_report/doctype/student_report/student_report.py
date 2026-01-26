@@ -107,13 +107,21 @@ class StudentReport(Document):
 
         self.yearly_total_grade = self.get_grade(self.yearly_average_mark)
 
-    def get_grade(grading_scale_name, mark):
-        grading_scale = frappe.get_doc("Grading Scale", grading_scale_name)
-        if not grading_scale:
-            frappe.throw(f"Grading scale '{grading_scale.name}' not found")
-        for interval in grading_scale.intervals:
-            if mark >= interval.threshold:
-                return interval.grade_code
+    def get_grade(self, mark, grading_scale_name=None):
+    # grading scale lives on Student Report, not Test Result
+    grading_scale_name = grading_scale_name or self.grading_scale
+
+    # If the report card isn't configured yet, don't block submissions
+    if not grading_scale_name:
+        return ""
+
+    grading_scale = frappe.get_doc("Grading Scale", grading_scale_name)
+
+    for interval in grading_scale.intervals:
+        if mark >= interval.threshold:
+            return interval.grade_code
+
+    return ""
 
 
 @frappe.whitelist()
